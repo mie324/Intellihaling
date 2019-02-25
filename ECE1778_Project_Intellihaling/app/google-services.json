@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "29011330129",
+    "firebase_url": "https://ece1778projectintellihaling.firebaseio.com",
+    "project_id": "ece1778projectintellihaling",
+    "storage_bucket": "ece1778projectintellihaling.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:29011330129:android:81d747ccdcc9bded",
+        "android_client_info": {
+          "package_name": "com.project.ece1778_project_intellihaling"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "29011330129-77prrgonta4idu2srrilil7mu857pfh0.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.project.ece1778_project_intellihaling",
+            "certificate_hash": "a949dc03b4d58065d29c70de2ff2d770a61d04c6"
+          }
+        },
+        {
+          "client_id": "29011330129-62ggej0f0qr0l1d41p07kg1t0lrl876e.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB8DBeRqkH0DnUiMXM86pG3e0Y8F9zIN40"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "29011330129-62ggej0f0qr0l1d41p07kg1t0lrl876e.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
