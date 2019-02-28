@@ -2,8 +2,8 @@ package com.project.ece1778_project_intellihaling;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -15,10 +15,15 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 import com.project.ece1778_project_intellihaling.util.BottomNavigationViewHelper;
 
-public class StartActivity extends AppCompatActivity {
+/**
+ * Created by dell on 2019/2/27.
+ */
 
-    private static final String TAG = "StartActivity";
-    private static final int ACTIVITY_NUM = 1;
+public class HomeActivity extends AppCompatActivity {
+    private static final String TAG = "HomeActivity";
+
+    private static final int ACTIVITY_NUM = 0;
+
     //firebase
     private FirebaseAuth mAuth;
     private FirebaseFirestore mDatabase;
@@ -30,9 +35,9 @@ public class StartActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_start);
+        setContentView(R.layout.activity_home);
 
-        mContext = StartActivity.this;
+        mContext = HomeActivity.this;
 
         //setting firebase, get UID
         mAuth = FirebaseAuth.getInstance();
@@ -53,17 +58,13 @@ public class StartActivity extends AppCompatActivity {
             enterLoginActivity();
         }
     }
-    @Override
-    protected void onRestart(){
-        super.onRestart();
 
-
-    }
     private void enterLoginActivity(){
-        Intent intent = new Intent(StartActivity.this, LoginActivity.class);
+        Intent intent = new Intent(HomeActivity.this, LoginActivity.class);
         startActivity(intent);
         finish();
     }
+
     /**
      * BottomNavigationView setup
      */

@@ -40,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
         mDatabase = FirebaseFirestore.getInstance();
         mStorage = FirebaseStorage.getInstance();
         mLineChartPeakflow =(LineChart) findViewById(R.id.chart_peakflow);
+        mLineChartFEV = (LineChart)findViewById(R.id.chart_fev);
         //设置可缩放
         mLineChartPeakflow.setScaleEnabled(true);
         mLineChartFEV =(LineChart) findViewById(R.id.chart_fev);
@@ -67,28 +68,48 @@ public class MainActivity extends AppCompatActivity {
             //formatter is used for customize X axis according to timestampList;
             final String[] strings = airflowDataManager.xAxisLabelArray(timestampList);
             IAxisValueFormatter formatter = new IAxisValueFormatter() {
-
                 @Override
                 public String getFormattedValue(float value, AxisBase axis) {
                     return strings[(int) value];
                 }
-
-                // we don't draw numbers, so no decimal digits needed
-                //@Override
-                public int getDecimalDigits() {  return 0; }
             };
-            XAxis xAxis = mLineChartPeakflow.getXAxis();
-            
-            xAxis.setEnabled(true);
-            xAxis.setGranularity(1f);
-            xAxis.setValueFormatter(formatter);
-            YAxis yAxis = mLineChartPeakflow.getAxisLeft();
-            yAxis.setTextSize(15f);
+            //formatter is for set layout for chart
+            xAxisMessageofChart(mLineChartPeakflow,formatter);
             mLineChartPeakflow.setData(airflowDataManager.data);
+            //just to show fev, not real fev
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        //mock volumn for fev chart
+        String fevVolumn = "3900/3800/4300/4600";
+        try {
+            AirflowDataManager airflowDataManager = new AirflowDataManager(uid,fevVolumn,timestamp);
+            //the content of timesatmpList array like this {2019-2-17 22:46,22:57,23:15}
+            List<String> timestampList = airflowDataManager.getTimestampList();
+            //formatter is used for customize X axis according to timestampList;
+            final String[] strings = airflowDataManager.xAxisLabelArray(timestampList);
+            IAxisValueFormatter formatter = new IAxisValueFormatter() {
+                @Override
+                public String getFormattedValue(float value, AxisBase axis) {
+                    return strings[(int) value];
+                }
+            };
+            xAxisMessageofChart(mLineChartFEV,formatter);
+            mLineChartFEV.setData(airflowDataManager.data);
+            //just to show fev, not real fev
         } catch (Exception e) {
             e.printStackTrace();
         }
 
+    }
+
+    private void xAxisMessageofChart(LineChart lineChart,IAxisValueFormatter formatter) {
+        XAxis xAxis = lineChart.getXAxis();
+        xAxis.setEnabled(true);
+        xAxis.setGranularity(1f);
+        xAxis.setValueFormatter(formatter);
+        YAxis yAxis = lineChart.getAxisLeft();
+        yAxis.setTextSize(15f);
     }
 
     private void enterLoginActivity(){

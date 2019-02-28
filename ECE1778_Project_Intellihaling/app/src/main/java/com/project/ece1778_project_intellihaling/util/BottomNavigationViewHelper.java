@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.MenuItem;
 
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
+import com.project.ece1778_project_intellihaling.HomeActivity;
 import com.project.ece1778_project_intellihaling.MainActivity;
 import com.project.ece1778_project_intellihaling.StartActivity;
 import com.project.ece1778_project_intellihaling.ProfileActivity;
@@ -20,7 +21,7 @@ public class BottomNavigationViewHelper {
 
     public static void setupBottomNavigationView(BottomNavigationViewEx bottomNavigationViewEx){
         Log.d(TAG, "setupBottomNavigationView: Setting up BottomNavigationView");
-        bottomNavigationViewEx.enableAnimation(false);
+        bottomNavigationViewEx.enableAnimation(true);
         bottomNavigationViewEx.enableItemShiftingMode(false);
         bottomNavigationViewEx.enableShiftingMode(false);
         bottomNavigationViewEx.setTextVisibility(true);
@@ -34,7 +35,7 @@ public class BottomNavigationViewHelper {
                 switch (item.getItemId()){
 
                     case R.id.ic_home:
-                        Intent intent1 = new Intent(context, MainActivity.class);//ACTIVITY_NUM = 0
+                        Intent intent1 = new Intent(context, HomeActivity.class);//ACTIVITY_NUM = 0
                         context.startActivity(intent1);
                         callingActivity.overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
                         callingActivity.finish();
