@@ -61,12 +61,28 @@
                 android:background="@color/colorPrimary"
                 android:onClick="setIcon"/>
 
-            <RadioButton
-                android:id="@+id/registration_parent_rbtn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="Parent" />
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <RadioButton
+                    android:id="@+id/registration_parent_rbtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:text="Parent"
+                    android:onClick="onRadioButtonClicked"/>
+
+                <RadioButton
+                    android:id="@+id/registration_child_rbtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:text="Child"
+                    android:onClick="onRadioButtonClicked"/>
+
+            </RelativeLayout>
+
 
             <!-- Name Label -->
             <android.support.design.widget.TextInputLayout
@@ -75,7 +91,7 @@
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="8dp">
 
-                <EditText android:id="@+id/registration_name_parent"
+                <EditText android:id="@+id/registration_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="textPersonName"
@@ -92,7 +108,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="8dp">
-                <EditText android:id="@+id/registration_email_parent"
+                <EditText android:id="@+id/registration_email"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="textEmailAddress"
@@ -109,7 +125,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="8dp">
-                <EditText android:id="@+id/registration_pwd_parent"
+                <EditText android:id="@+id/registration_pwd"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="textPassword"
@@ -126,7 +142,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="8dp">
-                <EditText android:id="@+id/registration_confirmPwd_parent"
+                <EditText android:id="@+id/registration_confirmPwd"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="textPassword"
@@ -136,56 +152,37 @@
                     android:text="12345678"/>
             </android.support.design.widget.TextInputLayout>
 
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/registration_icon_child"
-                android:layout_width="80dp"
-                android:layout_height="80dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="8dp"
-                android:layout_gravity="center"
-                android:src="@drawable/ic_icon"
-                android:background="@color/colorPrimary"
-                android:onClick="setIcon"/>
-
-            <RadioButton
-                android:id="@+id/registration_child_rbtn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="Child" />
-
-            <!-- Name Label -->
+            <!-- Height Label -->
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="8dp">
 
-                <EditText android:id="@+id/registration_name_child"
+                <EditText android:id="@+id/registration_height_child"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="textPersonName"
                     android:maxLines="1"
                     android:singleLine="true"
-                    android:hint="Name"
-                    android:text="Bob"/>
+                    android:hint="height (cm)"
+                    android:text="152"/>
 
             </android.support.design.widget.TextInputLayout>
 
-            <!--  Email Label -->
+            <!-- Wight Label -->
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="8dp">
-                <EditText android:id="@+id/registration_email_child"
+
+                <EditText android:id="@+id/registration_weight_child"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="textEmailAddress"
                     android:maxLines="1"
                     android:singleLine="true"
-                    android:hint="Email"
-                    android:text="bob@gmail.com"/>
+                    android:hint="weight (kg)"
+                    android:text="40"/>
 
             </android.support.design.widget.TextInputLayout>
 

@@ -15,11 +15,11 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 import com.project.ece1778_project_intellihaling.util.BottomNavigationViewHelper;
 
-public class StartActivity extends AppCompatActivity {
+public class HomeActivity extends AppCompatActivity {
 
-    private static final String TAG = "StartActivity";
+    private static final String TAG = "HomeActivity";
 
-    private static final int ACTIVITY_NUM = 1;
+    private static final int ACTIVITY_NUM = 0;
 
     //firebase
     private FirebaseAuth mAuth;
@@ -32,9 +32,9 @@ public class StartActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_start);
+        setContentView(R.layout.activity_home);
 
-        mContext = StartActivity.this;
+        mContext = HomeActivity.this;
 
         //setting firebase, get UID
         mAuth = FirebaseAuth.getInstance();
@@ -56,15 +56,8 @@ public class StartActivity extends AppCompatActivity {
         }
     }
 
-    @Override
-    protected void onRestart(){
-        super.onRestart();
-
-
-    }
-
     private void enterLoginActivity(){
-        Intent intent = new Intent(StartActivity.this, LoginActivity.class);
+        Intent intent = new Intent(HomeActivity.this, LoginActivity.class);
         startActivity(intent);
         finish();
     }

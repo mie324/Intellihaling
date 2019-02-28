@@ -25,6 +25,8 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -34,6 +36,9 @@ public class LoginActivity extends AppCompatActivity {
 
     //firebase
     private FirebaseAuth mAuth;
+    private FirebaseFirestore mDatabase;
+    String uID;
+    String role;
 
     // UI references.
     private AutoCompleteTextView mEmailView;
@@ -73,6 +78,7 @@ public class LoginActivity extends AppCompatActivity {
 
         //firebase
         mAuth = FirebaseAuth.getInstance();
+        mDatabase = FirebaseFirestore.getInstance();
 
         Button LogInButton = (Button) findViewById(R.id.btn_login);
         LogInButton.setOnClickListener(new View.OnClickListener() {
@@ -91,6 +97,8 @@ public class LoginActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        role = "";
     }
 
     @Override
@@ -99,8 +107,8 @@ public class LoginActivity extends AppCompatActivity {
         // Check if user is signed in (non-null)
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if(currentUser != null){
-            String uID = currentUser.getUid();
-            enterMainActivity();
+            uID = currentUser.getUid();
+            enterProfileActivity();
         }
     }
 
@@ -176,19 +184,50 @@ public class LoginActivity extends AppCompatActivity {
                         }else{
                             FirebaseUser user = mAuth.getCurrentUser();
                             Log.d(TAG, "onComplete: success. email is verified.");
-                            String uID = user.getUid();
-                            enterMainActivity();
+                            uID = user.getUid();
+
+                            enterProfileActivity();
 
                         }
                     }
                 });
     }
 
-    private void enterMainActivity(){
+    private void enterProfileActivity(){
+
+        if(isParent(uID)){
+         role = "parent";
+        }else if(isChild(uID)){
+            role = "child";
+        }else{
+            role = "";
+        }
+
         showProgress(false);
-        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+        Intent intent = new Intent(LoginActivity.this, ProfileActivity.class);
+        intent.putExtra("role", role);
         startActivity(intent);
         finish();
+    }
+
+    private boolean isParent(String uid) {
+        DocumentReference docRef = mDatabase.collection("parent").document(uid);
+        Log.d(TAG, "isParent: check if docRef is null");
+        if (docRef == null) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    private boolean isChild(String uid) {
+        DocumentReference docRef = mDatabase.collection("child").document(uid);
+        Log.d(TAG, "is child: check if docRef is null");
+        if (docRef == null) {
+            return false;
+        } else {
+            return true;
+        }
     }
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
