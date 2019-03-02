@@ -16,4 +16,10 @@
     <color name="white">#FFFFFF</color>
     <color name="yeeeellow">#AE7965</color>
     <color name="riceWhite">#ffffcc</color>
+
+
+    <color name="linen">#eac096</color>
+    <color name="blue">#6495ed</color>
+    <color name="lightbrown">#d2b48c</color>
+    <color name="redbrown">#a76471</color>
 </resources>

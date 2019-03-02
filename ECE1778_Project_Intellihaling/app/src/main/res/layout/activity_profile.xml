@@ -18,6 +18,8 @@
 
         </RelativeLayout>
 
+
+
         <RelativeLayout
             android:id="@+id/profile_relLayout2"
             android:layout_width="match_parent"
@@ -99,6 +101,7 @@
             </LinearLayout>
 
         </RelativeLayout>
+
         <!-- bottom navigation -->
         <include layout="@layout/layout_bottom_navigation"/>
 

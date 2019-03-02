@@ -9,23 +9,35 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.RadioButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 public class RegisterActivity extends AppCompatActivity {
 
@@ -38,13 +50,13 @@ public class RegisterActivity extends AppCompatActivity {
 
     //UI Inferences
     private View mRegistrationFormView;
-    private ImageView userParentIcon, userChildIcon;
-    private String parentName, parentEmail, parentPwd, parentConfirmPwd;
-    private String childName, childEmail;
-    private EditText userParentName, userParentEmail, userParentPwd, userParentConfirmPwd;
-    private EditText userChildName, userChildEmail;
+    private RadioButton mRbtnParent, mRbtnChild;
+    private ImageView userIcon;
+    private EditText userName, userEmail, userPwd, userConfirmPwd, childHeight, childWeight;
     private Button SignInButton;
     private Context mContext;
+
+    private String name, email, pwd, confirmPwd, height, weight;
 
     private ProgressBar registrationProgress;
     private TextView registrationWating;
@@ -54,6 +66,9 @@ public class RegisterActivity extends AppCompatActivity {
     private FirebaseFirestore mDatabase;
     private FirebaseStorage mStorage;
 
+    private String uID;
+    private String role;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,18 +76,20 @@ public class RegisterActivity extends AppCompatActivity {
 
         mRegistrationFormView=findViewById(R.id.registration_form);
 
-        //parent info
-        userParentIcon=findViewById(R.id.registration_icon_parent);
-        userParentName=findViewById(R.id.registration_name_parent);
-        userParentEmail=findViewById(R.id.registration_email_parent);
-        userParentPwd=findViewById(R.id.registration_pwd_parent);
-        userParentConfirmPwd=findViewById(R.id.registration_confirmPwd_parent);
+        //info
+        userIcon=findViewById(R.id.registration_icon_parent);
+        userName=findViewById(R.id.registration_name);
+        userEmail=findViewById(R.id.registration_email);
+        userPwd=findViewById(R.id.registration_pwd);
+        userConfirmPwd=findViewById(R.id.registration_confirmPwd);
 
-        //child info
-        userChildIcon=findViewById(R.id.registration_icon_child);
-        userChildName=findViewById(R.id.registration_name_child);
-        userChildEmail=findViewById(R.id.registration_email_child);
+        childHeight=findViewById(R.id.registration_height_child);
+        childWeight=findViewById(R.id.registration_weight_child);
+        childHeight.setVisibility(View.INVISIBLE);
+        childWeight.setVisibility(View.INVISIBLE);
 
+        mRbtnParent=(RadioButton) findViewById(R.id.registration_parent_rbtn);
+        mRbtnChild=(RadioButton) findViewById(R.id.registration_child_rbtn);
 
         SignInButton = (Button) findViewById(R.id.btn_signup);
         SignInButton.setOnClickListener(new View.OnClickListener() {
@@ -102,7 +119,15 @@ public class RegisterActivity extends AppCompatActivity {
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if(currentUser != null){
             String uID = currentUser.getUid();
+
+            if(isParent(uID))
+                role = "parent";
+            else
+                role = "child";
+
             enterProfileActivity();
+        }else{
+
         }
     }
 
@@ -146,6 +171,7 @@ public class RegisterActivity extends AppCompatActivity {
             image = BitmapFactory.decodeByteArray(imageData, 0, imageData.length, options);
 
             //set icon
+            userIcon.setImageBitmap(image);
 
             try {
                 stream.close();
@@ -172,102 +198,218 @@ public class RegisterActivity extends AppCompatActivity {
     private void attemptSignUp() {
 
         // Reset errors.
-        userParentName.setError(null);
-        userParentEmail.setError(null);
-        userParentPwd.setError(null);
-        userParentConfirmPwd.setError(null);
-
-        userChildName.setError(null);
-        userChildEmail.setError(null);
+        userName.setError(null);
+        userEmail.setError(null);
+        userPwd.setError(null);
+        userConfirmPwd.setError(null);
 
         // Store values at the time of the login attempt.
-        parentName = userParentName.getText().toString();
-        parentEmail = userParentEmail.getText().toString();
-        parentPwd = userParentPwd.getText().toString();
-        parentConfirmPwd = userParentConfirmPwd.getText().toString();
-
-        childName = userChildName.getText().toString();
-        childEmail = userChildEmail.getText().toString();
+        name = userName.getText().toString();
+        email = userEmail.getText().toString();
+        pwd = userPwd.getText().toString();
+        confirmPwd = userConfirmPwd.getText().toString();
 
         boolean cancel = false;
         View focusView = null;
 
         // Check for a valid password, if the user entered one.
-        if (!TextUtils.isEmpty(parentPwd) && !isPasswordValid(parentPwd)) {
-            userParentPwd.setError(getString(R.string.error_invalid_password));
-            focusView = userParentPwd;
+        if (!TextUtils.isEmpty(pwd) && !isPasswordValid(pwd)) {
+            userPwd.setError(getString(R.string.error_invalid_password));
+            focusView = userPwd;
             cancel = true;
         }
 
-        if(!TextUtils.isEmpty(parentConfirmPwd) && !parentPwd.equals(parentConfirmPwd)){
-            userParentConfirmPwd.setError(getString(R.string.error_incorrect_confirmPwd));
-            focusView = userParentConfirmPwd;
+        if(!TextUtils.isEmpty(confirmPwd) && !pwd.equals(confirmPwd)){
+            userConfirmPwd.setError(getString(R.string.error_incorrect_confirmPwd));
+            focusView = userConfirmPwd;
             cancel = true;
         }
 
-        // parentCheck for a valid email address.
-        if (TextUtils.isEmpty(parentEmail)) {
-            userParentEmail.setError(getString(R.string.error_field_required));
-            focusView = userParentEmail;
-            cancel = true;
-        } else if (!isEmailValid(parentEmail)) {
-            userParentEmail.setError(getString(R.string.error_invalid_email));
-            focusView = userParentEmail;
-            cancel = true;
-        }
-
-        // Check for non empty name
-        if(TextUtils.isEmpty(parentName)) {
-            userParentName.setError(getString(R.string.error_field_required));
-            focusView = userParentName;
-            cancel = true;
-        }
-
-        //child
         // Check for a valid email address.
-        if (TextUtils.isEmpty(childEmail)) {
-            userChildEmail.setError(getString(R.string.error_field_required));
-            focusView = userChildEmail;
+        if (TextUtils.isEmpty(email)) {
+            userEmail.setError(getString(R.string.error_field_required));
+            focusView = userEmail;
             cancel = true;
-        } else if (!isEmailValid(childEmail)) {
-            userChildEmail.setError(getString(R.string.error_invalid_email));
-            focusView = userChildEmail;
+        } else if (!isEmailValid(email)) {
+            userEmail.setError(getString(R.string.error_invalid_email));
+            focusView = userEmail;
             cancel = true;
         }
 
         // Check for non empty name
-        if(TextUtils.isEmpty(childName)) {
-            userChildName.setError(getString(R.string.error_field_required));
-            focusView = userChildName;
+        if(TextUtils.isEmpty(name)) {
+            userName.setError(getString(R.string.error_field_required));
+            focusView = userName;
             cancel = true;
+        }
+
+        if(image == null){
+            Toast.makeText(RegisterActivity.this, "photo needed", Toast.LENGTH_SHORT).show();
+            focusView = userIcon;
+            cancel = true;
+        }
+
+        if (!mRbtnChild.isChecked() && !mRbtnParent.isChecked()){
+            Toast.makeText(RegisterActivity.this, "need to select role", Toast.LENGTH_SHORT).show();
+            focusView = mRbtnParent;
+            cancel = true;
+        }
+
+        if(role == "child"){
+            height = childHeight.getText().toString();
+            weight = childWeight.getText().toString();
+
+            // Check for non empty height and weight
+            if (TextUtils.isEmpty(height)) {
+                childHeight.setError(getString(R.string.error_field_required));
+                focusView = childHeight;
+                cancel = true;
+            }
+
+            if(TextUtils.isEmpty(weight)){
+                childWeight.setError(getString(R.string.error_field_required));
+                focusView = childWeight;
+                cancel = true;
+            }
         }
 
         if(cancel){
             focusView.requestFocus();
         }else{
             showProgress(true);
-            SignUp();
+
+            FirebaseSignUp();
+
         }
     }
 
-    private void SignUp(){
+    private void FirebaseSignUp(){
 
+        mAuth.createUserWithEmailAndPassword(email, pwd)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (!task.isSuccessful()){
+                            // If sign in fails, display a message to the user.
+                            Log.e(TAG, "create account:failed", task.getException());
+                            showProgress(false);
+                            Toast.makeText(RegisterActivity.this, getString(R.string.error_auth_failed), Toast.LENGTH_SHORT).show();
+
+                        }else {
+                            // Sign in success, update UI with the signed-in user's information
+
+                            Log.d(TAG, "register: success. email is verified.");
+
+                            setUp();
+
+                        }
+                    }
+                });
+    }
+
+    private void setUp(){
+
+        Map<String, Object> newUser = new HashMap<>();
+        newUser.put("email", email);
+        newUser.put("password", pwd);
+        newUser.put("name", name);
+
+        FirebaseUser user = mAuth.getCurrentUser();
+        uID = user.getUid();
+
+        //check the role
+        if(role == "parent"){
+
+            newUser.put("role", "parent");
+            newUser.put("iconPath", uID);
+            newUser.put("childsUid", "");
+
+        }else if(role == "child"){
+
+            newUser.put("role", "child");
+            newUser.put("parentUid", "");
+            newUser.put("iconPath", uID);
+            newUser.put("height", "");
+            newUser.put("weight", "");
+            newUser.put("inhalerId", "");
+
+        }
+
+        mDatabase.collection(role).document(uID)
+                .set(newUser)
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(mContext,"SignUp Failed",Toast.LENGTH_LONG);
+                    }
+                });
+
+        //send parent icon to storage
+        ByteArrayOutputStream streamImg = new ByteArrayOutputStream();
+        image.compress(Bitmap.CompressFormat.PNG, 100, streamImg);
+        //convert to byte array
+        byte[] imageData = streamImg.toByteArray();
+
+        // Create a storage reference from app
+        StorageReference storageRef = mStorage.getReference();
+        // Create a reference to bio picture
+        StorageReference bioPictureRef = storageRef.child(uID);
+        //upload to storage
+        bioPictureRef.putBytes(imageData);
+
+        try {
+            streamImg.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        //sign up successful
+        enterProfileActivity();
     }
 
 
     private void enterProfileActivity(){
 
-        //too fast to ask data from firebase will fail, wait a little bit
-        try {
-            // Simulate network access.
-            Thread.sleep(500);
-        } catch (InterruptedException e) {
-        }
-
         showProgress(false);
         Intent intent = new Intent(RegisterActivity.this, ProfileActivity.class);
+        intent.putExtra("role", role);
         startActivity(intent);
         finish();
+    }
+
+    private boolean isParent(String uid) {
+        DocumentReference docRef = mDatabase.collection("parent").document(uid);
+        Log.d(TAG, "isParent: check if docRef is null");
+        if (docRef == null) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    public void onRadioButtonClicked(View view) {
+        // Is the button now checked?
+        boolean checked = ((RadioButton) view).isChecked();
+
+        // Check which radio button was clicked
+        switch(view.getId()) {
+            case R.id.registration_parent_rbtn:
+                if (checked){
+                    mRbtnChild.setChecked(false);
+                    role = "parent";
+                    childHeight.setVisibility(View.INVISIBLE);
+                    childWeight.setVisibility(View.INVISIBLE);
+                }
+                break;
+            case R.id.registration_child_rbtn:
+                if (checked){
+                    mRbtnParent.setChecked(false);
+                    role = "child";
+                    childHeight.setVisibility(View.VISIBLE);
+                    childWeight.setVisibility(View.VISIBLE);
+                }
+                break;
+        }
     }
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)

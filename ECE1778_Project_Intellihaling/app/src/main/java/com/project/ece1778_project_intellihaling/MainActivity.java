@@ -4,6 +4,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.AxisBase;
@@ -11,14 +14,18 @@ import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.formatter.IAxisValueFormatter;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
+import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 import com.project.ece1778_project_intellihaling.model.AirflowDataManager;
+import com.project.ece1778_project_intellihaling.util.BottomNavigationViewHelper;
 
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
+    private static final int ACTIVITY_NUM = 0;
     //firebase
     private FirebaseAuth mAuth;
     private FirebaseFirestore mDatabase;
@@ -44,18 +51,20 @@ public class MainActivity extends AppCompatActivity {
         //设置可缩放
         mLineChartPeakflow.setScaleEnabled(true);
         mLineChartFEV =(LineChart) findViewById(R.id.chart_fev);
+        setupBottomNavigationView();
     }
 
     @Override
     protected void onStart() {
         super.onStart();
         // Check if user is signed in (non-null)
-//        FirebaseUser currentUser = mAuth.getCurrentUser();
-//        if(currentUser != null){
-//            uID = currentUser.getUid();
-//        }else{
-//            enterLoginActivity();
-//        }
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        if(currentUser != null){
+            uID = currentUser.getUid();
+            //fetch data from database to show peakflow fev inhaler information
+        }else{
+            enterLoginActivity();
+        }
         //fetch chart data for chart_peakflow & chart_fev from database
         //set data to charts
         String uid = "woshimayuan";
@@ -116,5 +125,14 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(MainActivity.this, LoginActivity.class);
         startActivity(intent);
         finish();
+    }
+    private void setupBottomNavigationView(){
+
+        BottomNavigationViewEx bottomNavigationViewEx = (BottomNavigationViewEx) findViewById(R.id.layoutbottomNavBar);
+        BottomNavigationViewHelper.setupBottomNavigationView(bottomNavigationViewEx);
+        BottomNavigationViewHelper.enableNavigation(mContext, this,bottomNavigationViewEx);
+        Menu menu = bottomNavigationViewEx.getMenu();
+        MenuItem menuItem = menu.getItem(ACTIVITY_NUM);
+        menuItem.setChecked(true);
     }
 }
