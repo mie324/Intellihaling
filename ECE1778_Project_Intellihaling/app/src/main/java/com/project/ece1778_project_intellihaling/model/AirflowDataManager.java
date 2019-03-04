@@ -40,7 +40,7 @@ public class AirflowDataManager {
         this.rawflowVolumn = rawflowVolumn;
         this.rawTimestamp = rawTimestamp;
         getPeakflowVolumnList(rawflowVolumn);
-        getTimestampList(rawTimestamp);
+        generateTimestampList(rawTimestamp);
         if (timestampList.size() != flowVolumnList.size()) {
             throw new Exception("The number of timestamp diffs from peakflowVolumn");
         } else {
@@ -76,7 +76,7 @@ public class AirflowDataManager {
         this.rawTimestamp = rawTimestamp;
     }
 
-    private void getTimestampList(String rawTimestamp) {
+    private void generateTimestampList(String rawTimestamp) {
         String[] timeElements = rawTimestamp.split("/");
         for (int i = 0; i < timeElements.length; i++) {
             this.timestampList.add(timeElements[i]);
@@ -90,7 +90,7 @@ public class AirflowDataManager {
             this.flowVolumnList.add(peakflowVolumnElements[i]);
         }
     }
-
+    // this method return an array which give formatted time
     public String[] xAxisLabelArray(List<String> timestampList) {
         Long[] longTimestamp = new Long[timestampList.size()];
         for (int i = 0; i < longTimestamp.length; i++) {
@@ -110,6 +110,7 @@ public class AirflowDataManager {
         for (int i = 0; i < peakflowVolumnList.size(); i++) {
             this.chartEntryList.add(new Entry(i, Float.parseFloat(peakflowVolumnList.get(i))));
         }
+
         LineDataSet setComp1 = new LineDataSet(this.chartEntryList, "Last Record");
         //LINE COLOR
         setComp1.setColor(ColorTemplate.rgb("000000"));

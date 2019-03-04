@@ -5,4 +5,7 @@ package com.project.ece1778_project_intellihaling.model;
  */
 
 public class Inhaler {
+    private String Uid;
+    private String expireDate;
+    private String margin;
 }

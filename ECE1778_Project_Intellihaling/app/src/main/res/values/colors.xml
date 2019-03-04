@@ -3,7 +3,8 @@
     <color name="colorPrimary">#F4A720</color>
     <color name="colorPrimaryDark">#4D7186</color>
     <color name="colorAccent">#2D5873</color>
-    <color name="colorSeaBlue">#66ccff</color>
+    <color name="colorBackground">#f5f5f5</color>
+
     <color name="black">#000000</color>
     <color name="jet">#222222</color>
     <color name="oil">#333333</color>
@@ -14,9 +15,10 @@
     <color name="grey">#bfbfbf</color>
     <color name="iron">#CCCCCC</color>
     <color name="white">#FFFFFF</color>
+
+    <color name="colorSeaBlue">#66ccff</color>
     <color name="yeeeellow">#AE7965</color>
     <color name="riceWhite">#ffffcc</color>
-
 
     <color name="linen">#eac096</color>
     <color name="blue">#6495ed</color>

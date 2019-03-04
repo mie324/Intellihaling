@@ -7,6 +7,10 @@ package com.project.ece1778_project_intellihaling.model;
 public class Child {
     private String uid, parentUid, email, password, name, height, weight, iconPath, inhalerId;
 
+    public Child(){
+
+    }
+
     public Child(String uid, String parentUid, String email, String password, String name, String height, String weight, String iconPath, String inhalerId) {
 
         this.uid = uid;

@@ -25,6 +25,9 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -34,6 +37,10 @@ public class LoginActivity extends AppCompatActivity {
 
     //firebase
     private FirebaseAuth mAuth;
+    private FirebaseFirestore mDatabase;
+    private DocumentReference docRef;
+    private String uID;
+    String role;
 
     // UI references.
     private AutoCompleteTextView mEmailView;
@@ -73,6 +80,7 @@ public class LoginActivity extends AppCompatActivity {
 
         //firebase
         mAuth = FirebaseAuth.getInstance();
+        mDatabase = FirebaseFirestore.getInstance();
 
         Button LogInButton = (Button) findViewById(R.id.btn_login);
         LogInButton.setOnClickListener(new View.OnClickListener() {
@@ -99,8 +107,16 @@ public class LoginActivity extends AppCompatActivity {
         // Check if user is signed in (non-null)
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if(currentUser != null){
-            String uID = currentUser.getUid();
-            enterMainActivity();
+            uID = currentUser.getUid();
+
+            docRef = mDatabase.collection("parent").document(uID);
+            detectRole(new FireStoreCallback() {
+                @Override
+                public void onCallback(String role) {
+                    Log.d(TAG, "onCallback: " + role);
+                    enterProfileActivity();
+                }
+            });
         }
     }
 
@@ -176,17 +192,54 @@ public class LoginActivity extends AppCompatActivity {
                         }else{
                             FirebaseUser user = mAuth.getCurrentUser();
                             Log.d(TAG, "onComplete: success. email is verified.");
-                            String uID = user.getUid();
-                            enterMainActivity();
+                            uID = user.getUid();
 
+                            docRef = mDatabase.collection("parent").document(uID);
+                            detectRole(new FireStoreCallback() {
+                                @Override
+                                public void onCallback(String role) {
+
+                                    showProgress(false);
+                                    Log.d(TAG, "onCallback: " + role);
+                                    enterProfileActivity();
+                                }
+                            });
                         }
                     }
                 });
     }
 
-    private void enterMainActivity(){
+    private void detectRole(final FireStoreCallback fireStoreCallback){
+
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if(task.isSuccessful()){
+                    DocumentSnapshot document = task.getResult();
+
+                    if (document.exists()) {
+                        role = "parent";
+                    }else{
+                        role = "child";
+                    }
+
+                    fireStoreCallback.onCallback(role);
+
+                }else {
+                    Log.d(TAG, "detect role onComplete: task fails: ", task.getException() );
+                }
+            }
+        });
+    }
+
+    private interface FireStoreCallback{
+        void onCallback(String role);
+    }
+
+    private void enterProfileActivity(){
         showProgress(false);
-        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+        Intent intent = new Intent(LoginActivity.this, ProfileActivity.class);
+        intent.putExtra("role", role);
         startActivity(intent);
         finish();
     }
