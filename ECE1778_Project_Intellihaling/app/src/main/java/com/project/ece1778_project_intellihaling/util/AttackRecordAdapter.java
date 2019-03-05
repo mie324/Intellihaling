@@ -17,7 +17,7 @@ import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.formatter.IAxisValueFormatter;
 import com.google.firebase.auth.FirebaseAuth;
 import com.project.ece1778_project_intellihaling.model.AirflowDataManager;
-import com.project.ece1778_project_intellihaling.model.FlowQueryManager;
+import com.project.ece1778_project_intellihaling.model.OnceAttackRecord;
 import com.project.ece1778_project_intellihaling.R;
 
 import java.util.Collections;
@@ -32,19 +32,20 @@ public class AttackRecordAdapter extends RecyclerView.Adapter<AttackRecordAdapte
     private Context mContext;
     private FirebaseAuth mAuth;
     private String mUid;
-    private List<FlowQueryManager> attackDocsList;
+    private List<OnceAttackRecord> attackDocsList;
 
-    public AttackRecordAdapter(Context context,List<FlowQueryManager> attackDocsList) {
+    public AttackRecordAdapter(Context context,List<OnceAttackRecord> attackDocsList) {
         this.mContext = context;
         mAuth = FirebaseAuth.getInstance();
         mUid = mAuth.getUid();
         this.attackDocsList = attackDocsList;
+
         //judge if this user is child
         //we assume that the user is a child
         //then we fetch all record of the child from database
-        Collections.sort(attackDocsList, new Comparator<FlowQueryManager>() {
+        Collections.sort(attackDocsList, new Comparator<OnceAttackRecord>() {
             @Override
-            public int compare(FlowQueryManager o1, FlowQueryManager o2) {
+            public int compare(OnceAttackRecord o1, OnceAttackRecord o2) {
                 return o1.getAttackTimestamp().compareTo(o2.getAttackTimestamp());
             }
         });
@@ -56,8 +57,8 @@ public class AttackRecordAdapter extends RecyclerView.Adapter<AttackRecordAdapte
 
     public AttackRecordAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
 
-        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.cell_for_date_in_recyclerview, null, false);
-        return new ViewHolder(view);
+            View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.cell_for_date_in_recyclerview, null, false);
+            return new ViewHolder(view);
 
     }
 
@@ -68,17 +69,17 @@ public class AttackRecordAdapter extends RecyclerView.Adapter<AttackRecordAdapte
         viewHolder.btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FlowQueryManager flowQueryManager = attackDocsList.get(i);
-                setChartFlow(flowQueryManager,viewHolder.mLineChartFEV,flowQueryManager.getFev());
-                setChartFlow(flowQueryManager,viewHolder.mLineChartPeakflow,flowQueryManager.getPeakflow());
+                OnceAttackRecord onceAttackRecord = attackDocsList.get(i);
+                setChartFlow(onceAttackRecord,viewHolder.mLineChartFEV, onceAttackRecord.getFev());
+                setChartFlow(onceAttackRecord,viewHolder.mLineChartPeakflow, onceAttackRecord.getPeakflow());
             }
         });
     }
-    private void setChartFlow(FlowQueryManager flowQueryManager,LineChart mLineChart,String flowVolumn){
+    private void setChartFlow(OnceAttackRecord onceAttackRecord, LineChart mLineChart, String flowVolumn){
 
         try {
-            AirflowDataManager airflowDataManager = new AirflowDataManager(flowQueryManager.getuId()
-                    ,flowVolumn,flowQueryManager.getPeakflowAndfevTimestamp());
+            AirflowDataManager airflowDataManager = new AirflowDataManager(onceAttackRecord.getuId()
+                    ,flowVolumn, onceAttackRecord.getPeakflowAndfevTimestamp());
             //the content of timesatmpList array like this {2019-2-17 22:46,22:57,23:15}
             List<String> timestampList = airflowDataManager.getTimestampList();
             //formatter is used for customize X axis according to timestampList;
@@ -118,8 +119,6 @@ public class AttackRecordAdapter extends RecyclerView.Adapter<AttackRecordAdapte
         public ViewHolder(View itemView) {
             super(itemView);
             btn = (Button)itemView.findViewById(R.id.button_in_recyclerView);
-            mLineChartPeakflow= itemView.findViewById(R.id.chart_detail_peakflow);
-            mLineChartPeakflow= itemView.findViewById(R.id.chart_detail_fev);
         }
     }
 }

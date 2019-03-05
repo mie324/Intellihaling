@@ -4,7 +4,7 @@ package com.project.ece1778_project_intellihaling.model;
  * Created by dell on 2019/3/2.
  */
 
-public class FlowQueryManager {
+public class OnceAttackRecord {
     private String childUid;
     private String attackTimestamp;
     private String attackTimestampYear;
@@ -14,7 +14,7 @@ public class FlowQueryManager {
     private String fev;
     private String peakflowAndfevTimestamp;
 
-    public FlowQueryManager(String uId,String attackTimeStamp, String attackTimestampYear, String attackTimestampMonth, String attackTimestampday, String peakflow, String fev, String peakflowAndfevTimestamp) {
+    public OnceAttackRecord(String uId, String attackTimeStamp, String attackTimestampYear, String attackTimestampMonth, String attackTimestampday, String peakflow, String fev, String peakflowAndfevTimestamp) {
         this.childUid = uId;
         this.attackTimestamp = attackTimeStamp;
         this.attackTimestampYear = attackTimestampYear;
@@ -33,7 +33,7 @@ public class FlowQueryManager {
         this.attackTimestamp = attackTimestamp;
     }
 
-    public FlowQueryManager() {
+    public OnceAttackRecord() {
 
     }
 

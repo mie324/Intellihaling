@@ -129,6 +129,7 @@
                 android:textSize="14dp"
                 android:textStyle="bold" />
         </RelativeLayout>
+
         <RelativeLayout
             android:id="@+id/home_relLayout3"
             android:layout_width="match_parent"
@@ -141,6 +142,7 @@
                 android:layout_height="160dp"
                 android:onClick="startAsthmaAttackDetailActivity"/>
         </RelativeLayout>
+
         <RelativeLayout
             android:id="@+id/home_relLayout4"
             android:layout_width="match_parent"
