@@ -1,10 +1,14 @@
-package com.project.ece1778_project_intellihaling.util;
+package com.project.ece1778_project_intellihaling.model;
 
 import android.graphics.Rect;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import java.util.HashMap;
+
+/**
+ * Created by dell on 2019/3/4.
+ */
 
 public class RecyclerViewSpacesItemDecoration extends RecyclerView.ItemDecoration {
     private HashMap<String, Integer> mSpaceValueMap;

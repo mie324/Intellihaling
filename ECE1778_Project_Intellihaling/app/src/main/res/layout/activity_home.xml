@@ -10,11 +10,11 @@
         android:layout_height="match_parent">
 
         <RelativeLayout
+            android:id="@+id/home_relLayout1"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/home_relLayout1">
+            android:layout_height="wrap_content">
 
-            <include layout="@layout/layout_top_mainbar"/>
+            <include layout="@layout/layout_top_mainbar" />
 
         </RelativeLayout>
 
@@ -22,15 +22,164 @@
             android:id="@+id/home_relLayout2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="50dp"
-            android:layout_below="@id/home_relLayout1">
+            android:layout_below="@id/home_relLayout1"
+            android:layout_marginBottom="5dp"
+            android:layout_marginTop="10dp"
+            android:layout_centerInParent="true">
 
+            <TextView
+                android:id="@+id/inhaler_info"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignStart="@+id/textView2"
+                android:text="Inhaler Information"
+                android:textAlignment="textStart"
+                android:textColor="@color/jet"
+                android:textSize="22sp"
+                android:textStyle="bold" />
 
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/inhaler_info"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:text="You have :"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="18dp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/puff_remaining_textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/textView2"
+                android:layout_marginStart="35dp"
+                android:layout_toEndOf="@+id/textView2"
+                android:background="@color/colorSeaBlue"
+                android:textColor="@color/jet"
+                android:textSize="18dp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/textView4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/puff_remaining_textView"
+                android:layout_marginStart="45dp"
+                android:layout_toEndOf="@+id/inhaler_info"
+                android:text="puffs remaining"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="18dp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/textView5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignStart="@+id/textView2"
+                android:layout_below="@+id/textView2"
+                android:layout_marginTop="12dp"
+                android:text="It will expire in :"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="18dp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/expiry_date_textview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@+id/textView5"
+                android:layout_alignBottom="@+id/textView5"
+                android:layout_marginStart="35dp"
+                android:layout_toEndOf="@+id/textView5"
+                android:textStyle="bold"
+                android:background="@color/colorSeaBlue"
+                android:textColor="@color/jet"
+                android:textSize="18dp" />
+
+            <TextView
+                android:id="@+id/textView7"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@+id/expiry_date_textview"
+                android:layout_alignBottom="@+id/expiry_date_textview"
+                android:layout_alignStart="@+id/textView4"
+                android:layout_marginStart="0dp"
+                android:text="days"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="18dp"
+                android:textStyle="bold"
+                android:paddingBottom="10dp"/>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/home_relLayout3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/home_relLayout2"
+            android:layout_marginBottom="5dp"
+            android:layout_marginTop="10dp">
+
+            <TextView
+                android:id="@+id/pk_textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+
+                android:layout_centerHorizontal="true"
+                android:text="Peakflow Data Change"
+                android:textAlignment="center"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <com.github.mikephil.charting.charts.LineChart
+                android:id="@+id/chart_peakflow"
+                android:layout_width="match_parent"
+                android:layout_height="160dp"
+                android:layout_marginTop="10dp"
+                android:layout_below="@+id/pk_textView"
+                android:onClick="startAsthmaAttackDetailActivity"/>
 
         </RelativeLayout>
 
+        <RelativeLayout
+            android:id="@+id/home_relLayout4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/home_relLayout3"
+            android:layout_marginBottom="50dp"
+            android:layout_marginTop="10dp">
+
+            <TextView
+                android:id="@+id/fev_textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+
+                android:layout_centerHorizontal="true"
+                android:text="FEV Data Change"
+                android:textAlignment="center"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <com.github.mikephil.charting.charts.LineChart
+                android:id="@+id/chart_fev"
+                android:layout_width="match_parent"
+                android:layout_below="@+id/fev_textView"
+                android:layout_marginTop="10dp"
+                android:layout_height="160dp"
+                android:onClick="startAsthmaAttackDetailActivity1"
+                />
+        </RelativeLayout>
+
+
         <!-- bottom navigation -->
-        <include layout="@layout/layout_bottom_navigation"/>
+        <include layout="@layout/layout_bottom_navigation" />
 
     </RelativeLayout>
 

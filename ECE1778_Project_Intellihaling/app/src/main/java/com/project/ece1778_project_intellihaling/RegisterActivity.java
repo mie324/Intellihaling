@@ -329,8 +329,8 @@ public class RegisterActivity extends AppCompatActivity {
             newUser.put("role", "child");
             newUser.put("parentUid", "");
             newUser.put("iconPath", uID);
-            newUser.put("height", "");
-            newUser.put("weight", "");
+            newUser.put("height", height);
+            newUser.put("weight", weight);
             newUser.put("inhalerId", "");
 
         }

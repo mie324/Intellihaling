@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/photo_linLayout1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:paddingTop="50dp"
+        android:paddingLeft="24dp"
+        android:paddingRight="24dp">
+        <!--android:layout_below="@id/photo_relLayout1-->
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/instruction_not_feeling"
+            android:gravity="center"
+            android:textSize="30sp"/>
+
+        <Button
+            android:id="@+id/btn_instruction_main_start"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/circle"
+            android:text="Start"
+            android:textSize="25sp"
+            android:textAllCaps="true"
+            android:textColor="#fff"
+            android:onClick="startInstruction"/>
+
+    </LinearLayout>
+
+</RelativeLayout>

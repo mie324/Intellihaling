@@ -21,6 +21,23 @@
         completions."
     </string>
 
+    <string name="fragment_ins_main">Fragment Instruction Main</string>
+    <string name="fragment_ins_guide">Fragment Instruction Guide</string>
+    <string name="fragment_ins_pass">Fragment Instruction Pass</string>
+    <string name="fragment_ins_fail">Fragment Instruction Fail</string>
+
+    <string name="instruction_not_feeling">Not Feeling Well?</string>
+    <string name="instruction_blow">Blow 3 times to your meter and tell me the number</string>
+    <string name="instruction_you_are_fine">You Are Fine!</string>
+    <string name="instruction_good_to_go">Good To Go!</string>
+    <string name="instruction_oops">Oops! Might Asthma Happens!</string>
+    <string name="instruction_take_medicine">Take 2 puffs and Wait 1 min</string>
+    <string name="instruction_feeling_better">Feeling Better?</string>
+    <string name="instruction_enter_pek">Enter Peakflow number showing on the meter</string>
+    <string name="instruction_enter_fev">Enter FEV number showing on the meter</string>
+    <string name="instruction_emergency_1">You Are Having Asthma Attack!</string>
+    <string name="instruction_emergency_2">Don\'t Worry, Calling 911 Right Now!</string>
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

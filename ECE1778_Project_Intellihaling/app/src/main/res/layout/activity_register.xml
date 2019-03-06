@@ -98,7 +98,7 @@
                     android:maxLines="1"
                     android:singleLine="true"
                     android:hint="Name"
-                    android:text="Bob"/>
+                    android:text="Katty"/>
 
             </android.support.design.widget.TextInputLayout>
 
@@ -115,7 +115,7 @@
                     android:maxLines="1"
                     android:singleLine="true"
                     android:hint="Email"
-                    android:text="bob@gmail.com"/>
+                    android:text="Katty@gmail.com"/>
 
             </android.support.design.widget.TextInputLayout>
 
@@ -164,8 +164,8 @@
                     android:layout_height="wrap_content"
                     android:maxLines="1"
                     android:singleLine="true"
-                    android:hint="height (cm)"
-                    android:text="152"/>
+                    android:hint="height (inches)"
+                    android:text="47"/>
 
             </android.support.design.widget.TextInputLayout>
 

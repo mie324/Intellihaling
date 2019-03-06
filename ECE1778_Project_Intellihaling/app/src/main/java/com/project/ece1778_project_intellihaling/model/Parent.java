@@ -4,6 +4,10 @@ public class Parent {
 
     private String uid, childsUid, email, iconPath, name, password;
 
+    public Parent(){
+
+    }
+
     public Parent(String uid, String email, String name, String password, String iconPath, String childsUid) {
 
         this.uid = uid;

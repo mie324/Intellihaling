@@ -38,7 +38,7 @@
                 android:maxLines="1"
                 android:singleLine="true"
                 android:textAlignment="center"
-                android:text="bobbie@gmail.com"/>
+                android:text="katty@gmail.com"/>
 
         </android.support.design.widget.TextInputLayout>
 

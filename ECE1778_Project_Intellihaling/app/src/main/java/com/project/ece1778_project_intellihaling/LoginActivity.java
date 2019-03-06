@@ -26,6 +26,7 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 public class LoginActivity extends AppCompatActivity {
@@ -37,6 +38,7 @@ public class LoginActivity extends AppCompatActivity {
     //firebase
     private FirebaseAuth mAuth;
     private FirebaseFirestore mDatabase;
+    private DocumentReference docRef;
     String uID;
     String role;
 
@@ -106,9 +108,18 @@ public class LoginActivity extends AppCompatActivity {
         super.onStart();
         // Check if user is signed in (non-null)
         FirebaseUser currentUser = mAuth.getCurrentUser();
+
         if(currentUser != null){
             uID = currentUser.getUid();
-            enterProfileActivity();
+
+            docRef = mDatabase.collection("parent").document(uID);
+            detectRole(new FireStoreCallback() {
+                @Override
+                public void onCallback(String role) {
+                    Log.d(TAG, "onCallback: " + role);
+                    enterProfileActivity();
+                }
+            });
         }
     }
 
@@ -186,48 +197,55 @@ public class LoginActivity extends AppCompatActivity {
                             Log.d(TAG, "onComplete: success. email is verified.");
                             uID = user.getUid();
 
-                            enterProfileActivity();
+                            docRef = mDatabase.collection("parent").document(uID);
+                            detectRole(new FireStoreCallback() {
+                                @Override
+                                public void onCallback(String role) {
 
+                                    showProgress(false);
+                                    Log.d(TAG, "onCallback: " + role);
+                                    enterProfileActivity();
+                                }
+                            });
                         }
                     }
                 });
     }
 
+    private void detectRole(final FireStoreCallback fireStoreCallback){
+
+        //only way to check what role of uid
+
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if(task.isSuccessful()){
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        role = "parent";
+                    }else{
+                        role = "child";
+                    }
+
+                    fireStoreCallback.onCallback(role);
+
+                }else {
+                    Log.d(TAG, "detect role onComplete: task fails: ", task.getException() );
+                }
+            }
+        });
+    }
+
+    private interface FireStoreCallback{
+            void onCallback(String role);
+    }
+
     private void enterProfileActivity(){
 
-        if(isParent(uID)){
-         role = "parent";
-        }else if(isChild(uID)){
-            role = "child";
-        }else{
-            role = "";
-        }
-
-        showProgress(false);
         Intent intent = new Intent(LoginActivity.this, ProfileActivity.class);
         intent.putExtra("role", role);
         startActivity(intent);
         finish();
-    }
-
-    private boolean isParent(String uid) {
-        DocumentReference docRef = mDatabase.collection("parent").document(uid);
-        Log.d(TAG, "isParent: check if docRef is null");
-        if (docRef == null) {
-            return false;
-        } else {
-            return true;
-        }
-    }
-
-    private boolean isChild(String uid) {
-        DocumentReference docRef = mDatabase.collection("child").document(uid);
-        Log.d(TAG, "is child: check if docRef is null");
-        if (docRef == null) {
-            return false;
-        } else {
-            return true;
-        }
     }
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)

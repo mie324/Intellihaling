@@ -41,6 +41,7 @@ public class ProfileActivity extends AppCompatActivity {
     //firebase
     private FirebaseAuth mAuth;
     private FirebaseFirestore mDatabase;
+    private DocumentReference docRef;
     private FirebaseStorage mStorage;
     private String uID;
 
@@ -52,9 +53,9 @@ public class ProfileActivity extends AppCompatActivity {
     private Button editBtn;
 
     //object
-    String role;
-    Parent parentInfo;
-    Child childInfo;
+    private String role;
+    private Parent parentInfo;
+    private Child childInfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,6 +81,9 @@ public class ProfileActivity extends AppCompatActivity {
         else
             role = "";
 
+        parentInfo = new Parent();
+        childInfo = new Child();
+
         setupBottomNavigationView();
     }
 
@@ -88,28 +92,32 @@ public class ProfileActivity extends AppCompatActivity {
         super.onStart();
         // Check if user is signed in (non-null)
         FirebaseUser currentUser = mAuth.getCurrentUser();
-        uID = currentUser.getUid();
 
-        if(role == ""){
-            if(isParent(uID))
-                role = "parent";
-            else
-                role = "child";
+        if(currentUser != null){
+            uID = currentUser.getUid();
+
+            //check role to determine the ui and functions
+            if(role == ""){
+                docRef = mDatabase.collection("parent").document(uID);
+                detectRole(new FireStoreCallback() {
+                    @Override
+                    public void onCallback() {
+                        Log.d(TAG, "onCallback: detect role: " + role);
+
+                        docRef = mDatabase.collection(role).document(uID);
+                        setUpRole();
+                    }
+                });
+
+            }else{
+                docRef = mDatabase.collection(role).document(uID);
+                setUpRole();
+            }
+
+        }else{
+            enterLoginActivity();
         }
 
-        switch (role){
-            case "parent":
-                retriveParentInfo();
-                break;
-
-            case "child":
-                retriveChildInfo();
-                break;
-
-            case "":
-                enterLoginActivity();
-                break;
-        }
     }
 
     @Override
@@ -120,6 +128,7 @@ public class ProfileActivity extends AppCompatActivity {
         Intent intent = null;
         if(uID == ""){
             intent = new Intent(ProfileActivity.this, MainActivity.class);
+            finish();
         }
         else
             intent = getIntent();
@@ -127,19 +136,80 @@ public class ProfileActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    private void retriveParentInfo() {
+    private void setUpRole(){
 
-        DocumentReference docRef = mDatabase.collection("parent").document(uID);
+        switch (role){
+            case "parent":
+
+                retriveParentInfo(new FireStoreCallback() {
+                    @Override
+                    public void onCallback() {
+                        //success, check parentInfo
+                        Log.d(TAG, "onCallback: " + parentInfo.getEmail());
+
+                        parentProfileSetUp();
+                    }
+                });
+                break;
+
+            case "child":
+                retriveChildInfo(new FireStoreCallback() {
+                    @Override
+                    public void onCallback() {
+                        //success, check childInfo
+                        Log.d(TAG, "onCallback: " + childInfo.getEmail() + " p: " + childInfo.getParentUid());
+                        Log.d(TAG, "onCallback: info child h: " + childInfo.getHeight());
+
+                        childProfileSetup();
+                    }
+                });
+                break;
+        }
+
+    }
+
+    private void detectRole(final FireStoreCallback fireStoreCallback){
+
+        //only way to check what role of uid
+
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if(task.isSuccessful()){
+                    DocumentSnapshot document = task.getResult();
+
+                    if (document.exists()) {
+                        role = "parent";
+                    }else{
+                        role = "child";
+                    }
+
+                    fireStoreCallback.onCallback();
+
+                }else {
+                    Log.d(TAG, "detect role onComplete: task fails: ", task.getException() );
+                }
+            }
+        });
+    }
+
+    private void retriveParentInfo(final FireStoreCallback fireStoreCallback) {
+
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete( Task<DocumentSnapshot> task) {
                 if (task.isSuccessful()) {
                     DocumentSnapshot document = task.getResult();
                     if (document.exists()) {
-                        parentInfo = new Parent(uID,  (String)document.get("email"), (String)document.get("name")
-                                ,(String)document.get("password"), (String)document.get("iconPath"), (String)document.get("childsUid"));
 
-                        parentProfileSetUp();
+                        parentInfo.setUid(uID);
+                        parentInfo.setEmail((String)document.get("email"));
+                        parentInfo.setName((String)document.get("name"));
+                        parentInfo.setPassword((String)document.get("password"));
+                        parentInfo.setIconPath((String)document.get("iconPath"));
+                        parentInfo.setChildsUid((String)document.get("childsUid"));
+
+                        fireStoreCallback.onCallback();
 
                     } else {
                         Log.d(TAG, "get parent info onComplete: document not exists");
@@ -157,7 +227,7 @@ public class ProfileActivity extends AppCompatActivity {
         }
     }
 
-    private void retriveChildInfo() {
+    private void retriveChildInfo(final FireStoreCallback fireStoreCallback) {
 
         final DocumentReference docRef = mDatabase.collection("child").document(uID);
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -167,8 +237,11 @@ public class ProfileActivity extends AppCompatActivity {
                     DocumentSnapshot document = task.getResult();
                     if (document.exists()) {
 
-                        childInfo = new Child(uID, (String)document.get("parentUid"),(String)document.get("email")
-                                , (String)document.get("password"), (String)document.get("name"));
+                        childInfo.setUid(uID);
+                        childInfo.setParentUid((String)document.get("parentUid"));
+                        childInfo.setEmail((String)document.get("email"));
+                        childInfo.setPassword((String)document.get("password"));
+                        childInfo.setName((String)document.get("name"));
 
                         String h = (String)document.get("height");
                         String w = (String)document.get("weight");
@@ -184,7 +257,7 @@ public class ProfileActivity extends AppCompatActivity {
                         if(ih != "")
                             childInfo.setInhalerId(ih);
 
-                        childProfileSetup();
+                        fireStoreCallback.onCallback();
 
                     } else {
                         Log.d(TAG, "get child info onComplete: document not exists");
@@ -195,6 +268,10 @@ public class ProfileActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    private interface FireStoreCallback{
+        void onCallback();
     }
 
     private void parentProfileSetUp(){
@@ -275,17 +352,6 @@ public class ProfileActivity extends AppCompatActivity {
                 break;
         }
 
-
-    }
-
-    private boolean isParent(String uid) {
-        DocumentReference docRef = mDatabase.collection("parent").document(uid);
-        Log.d(TAG, "isParent: check if docRef is null");
-        if (docRef == null) {
-            return false;
-        } else {
-            return true;
-        }
     }
 
     private void enterLoginActivity() {

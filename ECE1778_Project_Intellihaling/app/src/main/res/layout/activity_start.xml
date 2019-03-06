@@ -10,41 +10,28 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+
+        <!-- Middle section (body) -->
         <RelativeLayout
+            android:id="@+id/start_relLayout2"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/photo_relLayout1">
+            android:layout_height="match_parent"
+            android:layout_marginBottom="50dp">
 
-            <include layout="@layout/layout_top_startbar"/>
+            <android.support.v4.view.ViewPager
+                android:id="@+id/start_container"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
+
+            </android.support.v4.view.ViewPager>
 
         </RelativeLayout>
-
-        <LinearLayout
-            android:id="@+id/photo_linLayout1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_marginTop="15dp"
-            android:layout_marginBottom="15dp"
-            android:layout_below="@id/photo_relLayout1">
-
-
-        </LinearLayout>
-
-        <RelativeLayout
-            android:id="@+id/photo_relLayout2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/photo_linLayout1">
-
-
-        </RelativeLayout>
-
 
         <!-- bottom navigation -->
         <include layout="@layout/layout_bottom_navigation"/>
 
     </RelativeLayout>
+
 
 </android.support.constraint.ConstraintLayout>
