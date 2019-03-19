@@ -2,30 +2,21 @@ package com.project.ece1778_project_intellihaling;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
-import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 import com.project.ece1778_project_intellihaling.model.Child;
-import com.project.ece1778_project_intellihaling.util.BottomNavigationViewHelper;
 import com.project.ece1778_project_intellihaling.util.MyFragmentPagerAdapter;
 
 public class StartActivity extends AppCompatActivity {
 
     private static final String TAG = "StartActivity";
-
-    private static final int ACTIVITY_NUM = 1;
 
     private static final int FRAG_MAIN_INDEX = 0;
     private static final int FRAG_GUIDE_INDEX = 1;
@@ -47,10 +38,12 @@ public class StartActivity extends AppCompatActivity {
     //fragment
     private ViewPager mViewPager;
     private InstructionMainFragment InsMainFrag;
+    private InstructionHeartRateFragment InsHeartFrag;
     private InstructionGuideFragment InsGuideFrag;
-    private InstructionResultPassFragment InsPassFrag;
-    private InstructionResultFailFragment InsFailFrag;
-    private InstructionEmergencyFragment InsEmerFrag;
+    private InstructionResultGreenFragment InsGreenFrag;
+    private InstructionResultYellowFragment InsYellowFrag;
+    private InstructionResultRedFragment InsRedFrag;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,8 +57,6 @@ public class StartActivity extends AppCompatActivity {
         mDatabase = FirebaseFirestore.getInstance();
 
         init();
-
-        setupBottomNavigationView();
     }
 
     @Override
@@ -77,7 +68,7 @@ public class StartActivity extends AppCompatActivity {
             uID = currentUser.getUid();
 
         }else{
-            enterLoginActivity();
+            enterMainActivity();
         }
 
     }
@@ -114,13 +105,15 @@ public class StartActivity extends AppCompatActivity {
 
         InsMainFrag = new InstructionMainFragment();
         InsGuideFrag = new InstructionGuideFragment();
-        InsPassFrag = new InstructionResultPassFragment();
-        InsFailFrag = new InstructionResultFailFragment();
-        InsEmerFrag = new InstructionEmergencyFragment();
+        InsHeartFrag = new InstructionHeartRateFragment();
+        InsGreenFrag = new InstructionResultGreenFragment();
+        InsYellowFrag = new InstructionResultYellowFragment();
+        InsRedFrag = new InstructionResultRedFragment();
 
         mViewPager = (ViewPager)findViewById(R.id.start_container);
         //set up pager
         setupViewPager(mViewPager);
+
         mViewPager.setCurrentItem(FRAG_MAIN_INDEX);
 
     }
@@ -129,10 +122,14 @@ public class StartActivity extends AppCompatActivity {
         MyFragmentPagerAdapter adpter = new MyFragmentPagerAdapter(getSupportFragmentManager());
 
         adpter.addFragment(InsMainFrag); //index 0
+
         adpter.addFragment(InsGuideFrag); //index 1
-        adpter.addFragment(InsPassFrag); //index 2
-        adpter.addFragment(InsFailFrag); //index 3
-        adpter.addFragment(InsEmerFrag); //index 4
+        adpter.addFragment(InsHeartFrag); //index 2
+
+        adpter.addFragment(InsGreenFrag); //index 3
+        adpter.addFragment(InsYellowFrag); //index 4
+        adpter.addFragment(InsRedFrag); //index 5
+
 
         viewPager.setAdapter(adpter);
 
@@ -142,22 +139,11 @@ public class StartActivity extends AppCompatActivity {
         mViewPager.setCurrentItem(fragmentNumber);
     }
 
-    private void enterLoginActivity(){
-        Intent intent = new Intent(StartActivity.this, LoginActivity.class);
+    private void enterMainActivity(){
+
+        Intent intent = new Intent(StartActivity.this, MainActivity.class);
         startActivity(intent);
         finish();
     }
 
-    /**
-     * BottomNavigationView setup
-     */
-    private void setupBottomNavigationView(){
-        Log.d(TAG, "setupBottomNavigationView: setting up BottomNavigationView");
-        BottomNavigationViewEx bottomNavigationViewEx = (BottomNavigationViewEx) findViewById(R.id.layoutbottomNavBar);
-        BottomNavigationViewHelper.setupBottomNavigationView(bottomNavigationViewEx);
-        BottomNavigationViewHelper.enableNavigation(mContext, this,bottomNavigationViewEx);
-        Menu menu = bottomNavigationViewEx.getMenu();
-        MenuItem menuItem = menu.getItem(ACTIVITY_NUM);
-        menuItem.setChecked(true);
-    }
 }

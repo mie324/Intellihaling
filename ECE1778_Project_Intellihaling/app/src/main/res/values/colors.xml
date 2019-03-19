@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#d2b48c</color>
+    <color name="colorPrimary">#ffa929</color>
     <color name="colorPrimaryDark">#4D7186</color>
     <color name="colorAccent">#2D5873</color>
-    <color name="colorBackground">#e1e0e2</color>
+    <color name="colorBackground">#FFFFFF</color>
 
     <color name="black">#000000</color>
     <color name="jet">#222222</color>
@@ -27,5 +27,7 @@
 
     <color name="green">#8ccfa1</color>
     <color name="red">#fb7a74</color>
+    <color name="orange">#ffa929</color>
+    <color name="yellow">#ffe700</color>
 
 </resources>

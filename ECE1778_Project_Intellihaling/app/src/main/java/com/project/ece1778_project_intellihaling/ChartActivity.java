@@ -45,9 +45,10 @@ import java.util.List;
  * Created by dell on 2019/2/27.
  */
 
-public class HomeActivity extends AppCompatActivity {
-    private static final String TAG = "HomeActivity";
-    private static final int ACTIVITY_NUM = 0;
+public class ChartActivity extends AppCompatActivity {
+
+    private static final String TAG = "ChartActivity";
+    private static final int REQUEST_LOGIN = 0;
 
     //firebase
     private FirebaseAuth mAuth;
@@ -58,6 +59,7 @@ public class HomeActivity extends AppCompatActivity {
     private String childUID;
 
     //widgets
+    private TextView mNameTest;
     private LineChart mLineChartPeakflow;
     private LineChart mLineChartFEV;
     private TextView mMargin;
@@ -70,15 +72,17 @@ public class HomeActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_home);
+        setContentView(R.layout.activity_chart);
 
-        mContext = HomeActivity.this;
+        mContext = ChartActivity.this;
 
         //setting firebase, get UID
         mAuth = FirebaseAuth.getInstance();
         mDatabase = FirebaseFirestore.getInstance();
         mStorage = FirebaseStorage.getInstance();
 
+        //widgets
+        mNameTest = findViewById(R.id.chart_name_title);
         mLineChartPeakflow = (LineChart) findViewById(R.id.chart_peakflow);
         mLineChartFEV = (LineChart) findViewById(R.id.chart_fev);
         mMargin = findViewById(R.id.puff_remaining_textView);
@@ -88,7 +92,7 @@ public class HomeActivity extends AppCompatActivity {
 
         role = "";
         childUID = "";
-        setupBottomNavigationView();
+
     }
 
     @Override
@@ -123,7 +127,7 @@ public class HomeActivity extends AppCompatActivity {
             });
 
         } else {
-            enterLoginActivity();
+            enterMainActivity();
         }
     }
 
@@ -140,9 +144,11 @@ public class HomeActivity extends AppCompatActivity {
                     if (document.exists()) {
                         role = "parent";
                         childUID = (String) document.get("childsUid");
+                        mNameTest.setText((String)document.get("name"));
                     } else {
                         role = "child";
                         childUID = uID;
+                        mNameTest.setText((String)document.get("name"));
                     }
 
                     fireStoreCallback.onCallback();
@@ -199,7 +205,7 @@ public class HomeActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
                             if(task.getResult().size() < 1){
-                                Toast toast = Toast.makeText(HomeActivity.this,"You have no record yet", Toast.LENGTH_LONG);
+                                Toast toast = Toast.makeText(ChartActivity.this,"You have no record yet", Toast.LENGTH_LONG);
                                 toast.setGravity(Gravity.CENTER, 0, 0);
                                 ViewGroup group = (ViewGroup) toast.getView();
                                 TextView messageTextView = (TextView) group.getChildAt(0);
@@ -278,14 +284,6 @@ public class HomeActivity extends AppCompatActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-
-    }
-
-    private void enterLoginActivity() {
-        Intent intent = new Intent(HomeActivity.this, LoginActivity.class);
-        startActivity(intent);
-        finish();
     }
 
     private void xAxisMessageofChart(LineChart lineChart, IAxisValueFormatter formatter) {
@@ -297,36 +295,32 @@ public class HomeActivity extends AppCompatActivity {
         yAxis.setTextSize(15f);
     }
 
-    /**
-     * BottomNavigationView setup
-     */
-    private void setupBottomNavigationView() {
-        Log.d(TAG, "setupBottomNavigationView: setting up BottomNavigationView");
-        BottomNavigationViewEx bottomNavigationViewEx = (BottomNavigationViewEx) findViewById(R.id.layoutbottomNavBar);
-        BottomNavigationViewHelper.setupBottomNavigationView(bottomNavigationViewEx);
-        BottomNavigationViewHelper.enableNavigation(mContext, this, bottomNavigationViewEx);
-        Menu menu = bottomNavigationViewEx.getMenu();
-        MenuItem menuItem = menu.getItem(ACTIVITY_NUM);
-        menuItem.setChecked(true);
-    }
-
-    public void startAsthmaAttackDetailActivity(View view) {
-        Intent intent = new Intent(HomeActivity.this, AsthmaAttackDetailActivity.class);
-        intent.putExtra("childUID", childUID);
-        startActivity(intent);
-    }
-
     public void startAsthmaAttackDetailActivity1(View view) {
         startAsthmaAttackDetailActivity(view);
     }
     //when you click on chart, the page will jump to AsthmaAttackDetailActivity
 
-    //log out
-    public void logout(View view){
-        mAuth.signOut();
-        Toast.makeText(mContext, "Log Out Success", Toast.LENGTH_LONG);
-        Intent intent = new Intent(HomeActivity.this, MainActivity.class);
+    public void startAsthmaAttackDetailActivity(View view) {
+        Intent intent = new Intent(ChartActivity.this, AsthmaAttackDetailActivity.class);
+        intent.putExtra("childUID", childUID);
         startActivity(intent);
-        this.finish();
+    }
+
+
+    private void enterMainActivity() {
+        Intent intent = new Intent(ChartActivity.this, MainActivity.class);
+        startActivityForResult(intent, REQUEST_LOGIN);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == REQUEST_LOGIN) {
+            if (resultCode == RESULT_OK) {
+
+                // TODO: Implement signup logic
+                // Default
+                this.finish();
+            }
+        }
     }
 }

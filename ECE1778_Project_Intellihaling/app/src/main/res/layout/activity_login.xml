@@ -69,7 +69,7 @@
                 android:hint="Email"
                 android:maxLines="1"
                 android:singleLine="true"
-                android:text="kate@gmail.com"/>
+                android:text="katty@gmail.com"/>
 
         </android.support.design.widget.TextInputLayout>
 

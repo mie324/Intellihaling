@@ -7,96 +7,193 @@
     android:fitsSystemWindows="true"
     tools:context=".MainActivity">
 
-    <!--<ImageView-->
-        <!--android:id="@+id/logo"-->
-        <!--android:src="@drawable/logo"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="72dp"-->
-        <!--android:layout_marginTop="30dp" />-->
-
     <TextView
         android:id="@+id/logo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:layout_alignParentTop="true"
         android:text="INTELLIHALING"
-        android:textSize="50dp"
-        android:textColor="@color/colorPrimaryDark" />
-
-    <ImageView
-        android:layout_width="120dp"
-        android:layout_height="120dp"
-        android:layout_below="@+id/logo"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:layout_marginTop="30dp"
-        android:src="@mipmap/img_4"/>
-
+        android:textSize="50sp"
+        android:textColor="@color/colorPrimaryDark"
+        android:layout_marginTop="15dp"/>
 
     <RelativeLayout
         android:id="@+id/main_relaLayout1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/main_relaLayout2"
-        android:layout_marginBottom="15dp">
+        android:layout_below="@+id/logo"
+        android:layout_marginTop="15dp"
+        android:gravity="center">
 
-        <Button
-            android:id="@+id/btn_main_1"
-            android:layout_width="27mm"
-            android:layout_height="27mm"
-            android:background="@color/blue"
-            android:layout_alignParentLeft="true"
-            android:layout_marginLeft="15dp"
-            android:text="Assess and Manage"/>
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="253dp"
+            android:text="Left"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="24sp" />
 
-        <Button
-            android:id="@+id/btn_main_2"
-            android:layout_width="27mm"
-            android:layout_height="27mm"
-            android:background="@color/linen"
-            android:layout_alignParentRight="true"
-            android:layout_marginRight="15dp"
-            android:text="Inhaler Reminder"/>
+        <TextView
+            android:id="@+id/main_puff_textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/textView"
+            android:layout_centerHorizontal="true"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="24sp" />
+
+        <TextView
+            android:id="@+id/textView6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/main_puff_textView"
+            android:text="Puffs"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="24sp" />
+
+        <TextView
+            android:id="@+id/textView8"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignStart="@+id/textView"
+            android:layout_below="@+id/textView"
+            android:layout_marginTop="15dp"
+            android:text="Expire"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="24sp" />
+
+        <TextView
+            android:id="@+id/main_expire_date_textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/textView8"
+            android:layout_centerHorizontal="true"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="24sp" />
+
+        <TextView
+            android:id="@+id/textView10"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/textView6"
+            android:layout_marginTop="15dp"
+            android:text="Days"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="24sp" />
 
     </RelativeLayout>
+
 
     <RelativeLayout
         android:id="@+id/main_relaLayout2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/btn_mainEnter"
+        android:layout_above="@id/main_linearLayout1"
         android:layout_marginBottom="15dp">
 
-        <Button
-            android:id="@+id/btn_main_3"
+        <FrameLayout
             android:layout_width="27mm"
             android:layout_height="27mm"
-            android:background="@color/lightbrown"
-            android:layout_alignParentLeft="true"
             android:layout_marginLeft="15dp"
-            android:text="Show Chart"/>
+            android:layout_alignParentLeft="true"
+            android:background="@color/orange"
+            android:onClick="main_enter_start_fr">
 
-        <Button
-            android:id="@+id/btn_main_4"
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_gravity="top|center"
+                android:text="Asthma or Not"
+                android:textSize="20sp"/>
+
+            <ImageView
+                android:id="@+id/btn_main_3"
+                android:layout_width="20mm"
+                android:layout_height="20mm"
+                android:layout_gravity="bottom|right"
+                android:src="@mipmap/img_inhale_1"/>
+        </FrameLayout>
+
+        <FrameLayout
             android:layout_width="27mm"
             android:layout_height="27mm"
-            android:background="@color/redbrown"
-            android:layout_alignParentRight="true"
             android:layout_marginRight="15dp"
-            android:text="Call Emergency"/>
+            android:layout_alignParentRight="true"
+            android:background="@color/green"
+            android:onClick="main_enter_chart_fr">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_gravity="top|center"
+                android:text="Chart"
+                android:textSize="25sp"/>
+
+            <ImageView
+                android:id="@+id/btn_main_4"
+                android:layout_width="20mm"
+                android:layout_height="20mm"
+                android:layout_gravity="bottom|left"
+                android:src="@mipmap/img_chart"/>
+        </FrameLayout>
 
     </RelativeLayout>
 
-    <Button
-        android:id="@+id/btn_mainEnter"
+    <LinearLayout
+        android:id="@+id/main_linearLayout1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Enter to your profile"
-        android:background="@color/colorPrimaryDark"
-        android:layout_marginLeft="15dp"
-        android:layout_marginRight="15dp"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="15dp"/>
+        android:orientation="vertical"
+        android:layout_alignParentBottom="true">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="22mm"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:background="@color/red"
+            android:onClick="main_enter_help_fr">
+
+            <TextView
+                android:id="@+id/right_on"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_gravity="center|left"
+                android:text="Help is on the way"
+                android:textSize="20sp"/>
+
+            <ImageView
+                android:id="@+id/btn_main_5"
+                android:layout_width="22mm"
+                android:layout_height="22mm"
+                android:layout_marginRight="10dp"
+                android:layout_gravity="bottom|right"
+                android:src="@mipmap/img_ambulence"/>
+
+        </FrameLayout>
+
+        <Button
+            android:id="@+id/btn_mainEnter"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:layout_gravity="center"
+            android:text="Enter your profile"
+            android:textSize="20sp"
+            android:textColor="@color/colorPrimaryDark"
+            android:background="@color/riceWhite"
+            android:textAllCaps="false"
+            android:onClick="main_enter_profile_btn"/>
+
+    </LinearLayout>
+
+
 
 </RelativeLayout>

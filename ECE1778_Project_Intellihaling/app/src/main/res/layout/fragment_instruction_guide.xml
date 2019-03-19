@@ -17,7 +17,7 @@
             android:paddingRight="24dp">
 
             <TextView
-                android:id="@+id/instruction_time"
+                android:id="@+id/instruction_guide_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -28,25 +28,46 @@
             </TextView>
 
             <TextView
-                android:id="@+id/instruction_guide_text_msg"
+                android:id="@+id/instruction_guide_text_msg_1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginTop="20dp"
-                android:text="@string/instruction_feeling_better"
-                android:textSize="30sp"
+                android:text="@string/instruction_feeling_difficulty"
+                android:textSize="20sp"
+                android:gravity="center"
+                android:textAlignment="center">
+            </TextView>
+            <TextView
+                android:id="@+id/instruction_guide_text_msg_2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="@string/instruction_need_inhaler"
+                android:textSize="20sp"
                 android:gravity="center"
                 android:textAlignment="center">
             </TextView>
 
-            <ImageView
-                android:id="@+id/instruction_guide_img_1"
-                android:layout_width="200dp"
-                android:layout_height="150dp"
-                android:layout_gravity="center"
-                android:src="@mipmap/img_2"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="10dp" />
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp">
+
+                <ImageView
+                    android:id="@+id/instruction_guide_img_1"
+                    android:layout_width="200dp"
+                    android:layout_height="150dp"
+                    android:src="@mipmap/img_blow"
+                    android:layout_alignParentLeft="true"/>
+
+                <ImageView
+                    android:id="@+id/instuction_guide_img_2"
+                    android:layout_width="200dp"
+                    android:layout_height="150dp"
+                    android:layout_alignParentRight="true"
+                    android:src="@mipmap/img_4"/>
+            </RelativeLayout>
 
             <TextView
                 android:id="@+id/instruction_guide_text_blow"
@@ -54,7 +75,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:text="@string/instruction_blow"
-                android:textSize="30sp"
+                android:textSize="20sp"
                 android:textAlignment="center"
                 android:layout_marginTop="20dp">
             </TextView>
@@ -72,7 +93,7 @@
                     android:maxLines="1"
                     android:singleLine="true"
                     android:hint="@string/instruction_enter_pek"
-                    android:text="3500"
+                    android:text="140"
                     android:textSize="25sp"
                     android:textAlignment="center"/>
 
@@ -90,7 +111,7 @@
                     android:maxLines="1"
                     android:singleLine="true"
                     android:hint="@string/instruction_enter_fev"
-                    android:text="3600"
+                    android:text="40"
                     android:textSize="25sp"
                     android:textAlignment="center"/>
 

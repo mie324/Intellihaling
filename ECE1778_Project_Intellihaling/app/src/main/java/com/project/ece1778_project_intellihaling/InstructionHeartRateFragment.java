@@ -11,15 +11,17 @@ import android.widget.TextView;
 
 import com.project.ece1778_project_intellihaling.model.OnceAttackRecordStatic;
 
-public class InstructionEmergencyFragment extends Fragment {
+public class InstructionHeartRateFragment extends Fragment {
 
-    private static final String TAG = "InstructionEmergencyFra";
+    private static final String TAG = "InstructionHeartRateFra";
 
     private static final int FRAG_MAIN_INDEX = 0;
     private static final int FRAG_GUIDE_INDEX = 1;
-    private static final int FRAG_PASS_INDEX = 2;
-    private static final int FRAG_FAIL_INDEX = 3;
-    private static final int FRAG_EMER_INDEX = 4;
+    private static final int FRAG_HEART_INDEX = 2;
+    private static final int FRAG_GREEN_INDEX = 3;
+    private static final int FRAG_YELLOW_INDEX = 4;
+    private static final int FRAG_RED_INDEX = 5;
+
 
     //UI
     private TextView CurrentTimeView;
@@ -38,9 +40,9 @@ public class InstructionEmergencyFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.fragment_instruction_emergency, container, false);
+        View view = inflater.inflate(R.layout.fragment_instruction_heart_rate, container, false);
 
-        CurrentTimeView = (TextView)view.findViewById(R.id.instruction_time);
+        CurrentTimeView = (TextView)view.findViewById(R.id.instruction_em_time);
 
         setUp();
 
@@ -59,6 +61,4 @@ public class InstructionEmergencyFragment extends Fragment {
         CurrentTimeView.setText(currentTime);
 
     }
-
-
 }

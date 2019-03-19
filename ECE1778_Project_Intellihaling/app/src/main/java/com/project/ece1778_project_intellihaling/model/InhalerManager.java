@@ -43,8 +43,9 @@ public class InhalerManager {
     }
     public String calculateRemainingDays(){
         Long firstDate = Long.parseLong(this.firstUsageDate);
+        Long twentyDays = 1814400000L;
         Long currentTimeMillis = System.currentTimeMillis();
-        Long remainingMillis = currentTimeMillis - firstDate;
+        Long remainingMillis = twentyDays - currentTimeMillis + firstDate;
         String remainingDays = formatTime(remainingMillis);
         return remainingDays;
     }

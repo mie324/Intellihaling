@@ -28,15 +28,19 @@ import com.project.ece1778_project_intellihaling.model.OnceAttackRecordStatic;
 import java.util.HashMap;
 import java.util.Map;
 
-public class InstructionResultPassFragment extends Fragment {
+public class InstructionResultGreenFragment extends Fragment {
 
     private static final String TAG = "InstructionResultPassFr";
+    private static final String FINE_REMINDER = "fineReminder";
 
     private static final int FRAG_MAIN_INDEX = 0;
     private static final int FRAG_GUIDE_INDEX = 1;
-    private static final int FRAG_PASS_INDEX = 2;
-    private static final int FRAG_FAIL_INDEX = 3;
-    private static final int FRAG_EMER_INDEX = 4;
+    private static final int FRAG_HEART_INDEX = 2;
+    private static final int FRAG_GREEN_INDEX = 3;
+    private static final int FRAG_YELLOW_INDEX = 4;
+    private static final int FRAG_RED_INDEX = 5;
+
+    private View view;
 
     //UI
     private TextView CurrentTimeView;
@@ -59,15 +63,18 @@ public class InstructionResultPassFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_instruction_pass, container, false);
+        view = inflater.inflate(R.layout.fragment_instruction_green, container, false);
 
-        CurrentTimeView = (TextView)view.findViewById(R.id.instruction_time);
-        confirmBtn = (Button)view.findViewById(R.id.btn_instruction_pass_done_btn);
+        CurrentTimeView = (TextView)view.findViewById(R.id.instruction_green_time);
+        confirmBtn = (Button)view.findViewById(R.id.btn_instruction_green_done_btn);
 
         mAuth = FirebaseAuth.getInstance();
         mDatabase = FirebaseFirestore.getInstance();
 
         setUp();
+
+        btnSetUp();
+
         return view;
     }
 
@@ -76,7 +83,7 @@ public class InstructionResultPassFragment extends Fragment {
         super.onStart();
 
         FirebaseUser currentUser = mAuth.getCurrentUser();
-        if(currentUser != null) {
+        if (currentUser != null) {
             childUID = currentUser.getUid();
         }
 
@@ -93,11 +100,46 @@ public class InstructionResultPassFragment extends Fragment {
         String mm = OnceAttackRecordStatic.getAttackTimestampMinute();
         String currentTime = "Start: " + yyyy + "/" + MM + "/" + dd + " " + HH + ":" + mm;
         CurrentTimeView.setText(currentTime);
+    }
 
+    public void btnSetUp(){
 
         confirmBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+//                String tsTmp = OnceAttackRecordStatic.getAttackTimestamp();
+//                if(tsTmp.contains("/")){
+//
+//                    sendAttackRecord();
+//
+//                    sendInhalerMargin(new FireStoreCallback() {
+//                        @Override
+//                        public void onCallback() {
+//                            Log.d(TAG, "send inhaler Margin onCallback: " + OnceAttackRecordStatic.getInhalorMargin());
+//
+//                            mActivity.setViewPager(FRAG_MAIN_INDEX);
+//                        }
+//                    });
+//
+//                }else{
+//                    mActivity.setViewPager(FRAG_MAIN_INDEX);
+//                }
+
+                //send notification
+                mDatabase.collection(FINE_REMINDER).document(childUID).update("flag",String.valueOf(System.currentTimeMillis()))
+                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                Log.d(TAG, "onSuccess: success");
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Log.w(TAG, "onFailure: failure", e);
+                            }
+                        });
 
                 sendAttackRecord();
 
@@ -114,6 +156,9 @@ public class InstructionResultPassFragment extends Fragment {
     }
 
     private void sendAttackRecord(){
+
+        String tsTmp = OnceAttackRecordStatic.getAttackTimestamp();
+        if(tsTmp.contains("/")){}
 
         //upload to cloud, update attack record
         Map<String, Object> newAttackRecord = new HashMap<>();

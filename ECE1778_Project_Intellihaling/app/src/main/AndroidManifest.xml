@@ -9,9 +9,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".AsthmaAttackDetailActivity"></activity>
+        <activity android:name=".EmergencyActivity"></activity>
+        <activity android:name=".AsthmaAttackDetailActivity" />
         <activity android:name=".LinkChildActivity" />
-        <activity android:name=".HomeActivity" />
+        <activity android:name=".ChartActivity" />
         <activity android:name=".RegisterActivity" />
         <activity
             android:name=".LoginActivity"

@@ -1,10 +1,12 @@
 package com.project.ece1778_project_intellihaling;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -25,18 +27,19 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 import com.project.ece1778_project_intellihaling.model.Child;
+import com.project.ece1778_project_intellihaling.model.Inhaler;
 import com.project.ece1778_project_intellihaling.model.Parent;
 import com.project.ece1778_project_intellihaling.util.BottomNavigationViewHelper;
 
 public class ProfileActivity extends AppCompatActivity {
 
     private static final String TAG = "ProfileActivity";
-
-    private static final int ACTIVITY_NUM = 2;
 
     //firebase
     private FirebaseAuth mAuth;
@@ -56,6 +59,7 @@ public class ProfileActivity extends AppCompatActivity {
     private String role;
     private Parent parentInfo;
     private Child childInfo;
+    private Button mButtonNormal;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,7 +88,53 @@ public class ProfileActivity extends AppCompatActivity {
         parentInfo = new Parent();
         childInfo = new Child();
 
-        setupBottomNavigationView();
+        mButtonNormal = (Button)findViewById(R.id.button_reset_inhaler);
+        mButtonNormal.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showNorDialog();
+            }
+        });
+    }
+
+    private void showNorDialog() {
+        final AlertDialog.Builder normalDialog =
+                new AlertDialog.Builder(ProfileActivity.this);
+        normalDialog.setTitle("Do you wanna reset your inhaler?");
+        normalDialog.setMessage("if you confirm, your inhaler information will be reset");
+        normalDialog.setPositiveButton("confirm", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                setInhalerInfo();
+                Toast.makeText(ProfileActivity.this, "Your inhaler have been reset", Toast.LENGTH_LONG).show();
+            }
+
+            private void setInhalerInfo() {
+                mDatabase.collection("inhaler").whereEqualTo("childUid", childInfo.getUid()).get()
+                        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                if (task.isSuccessful()) {
+                                    Inhaler inhaler = new Inhaler();
+                                    for (QueryDocumentSnapshot document : task.getResult()) {
+                                        String documnetId = document.getId();
+                                        mDatabase.collection("inhaler").document(documnetId).update(
+                                                "firstUsageDate",String.valueOf(System.currentTimeMillis()),
+                                                "margin","200");
+                                    }
+
+                                }
+                            }
+                        });
+            }
+        });
+        normalDialog.setNegativeButton("cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        });
+        normalDialog.show();
     }
 
     @Override
@@ -115,7 +165,7 @@ public class ProfileActivity extends AppCompatActivity {
             }
 
         }else{
-            enterLoginActivity();
+            enterMainActivity();
         }
 
     }
@@ -354,10 +404,10 @@ public class ProfileActivity extends AppCompatActivity {
 
     }
 
-    private void enterLoginActivity() {
-        Intent intent = new Intent(ProfileActivity.this, LoginActivity.class);
+    private void enterMainActivity() {
+        Intent intent = new Intent(ProfileActivity.this, MainActivity.class);
         startActivity(intent);
-        finish();
+        this.finish();
     }
 
     //log out
@@ -367,18 +417,5 @@ public class ProfileActivity extends AppCompatActivity {
         Intent intent = new Intent(ProfileActivity.this, MainActivity.class);
         startActivity(intent);
         this.finish();
-    }
-
-    /**
-     * BottomNavigationView setup
-     */
-    private void setupBottomNavigationView(){
-        Log.d(TAG, "setupBottomNavigationView: setting up BottomNavigationView");
-        BottomNavigationViewEx bottomNavigationViewEx = (BottomNavigationViewEx) findViewById(R.id.layoutbottomNavBar);
-        BottomNavigationViewHelper.setupBottomNavigationView(bottomNavigationViewEx);
-        BottomNavigationViewHelper.enableNavigation(mContext, this,bottomNavigationViewEx);
-        Menu menu = bottomNavigationViewEx.getMenu();
-        MenuItem menuItem = menu.getItem(ACTIVITY_NUM);
-        menuItem.setChecked(true);
     }
 }

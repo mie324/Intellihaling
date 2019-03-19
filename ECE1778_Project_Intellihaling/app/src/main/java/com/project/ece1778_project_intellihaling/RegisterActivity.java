@@ -125,7 +125,7 @@ public class RegisterActivity extends AppCompatActivity {
             else
                 role = "child";
 
-            enterProfileActivity();
+            enterMainActivity();
         }else{
 
         }
@@ -364,14 +364,14 @@ public class RegisterActivity extends AppCompatActivity {
         }
 
         //sign up successful
-        enterProfileActivity();
+        enterMainActivity();
     }
 
 
-    private void enterProfileActivity(){
+    private void enterMainActivity(){
 
         showProgress(false);
-        Intent intent = new Intent(RegisterActivity.this, ProfileActivity.class);
+        Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
         intent.putExtra("role", role);
         startActivity(intent);
         finish();

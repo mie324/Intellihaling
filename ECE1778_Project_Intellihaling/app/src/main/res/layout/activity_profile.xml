@@ -18,13 +18,10 @@
 
         </RelativeLayout>
 
-
-
         <RelativeLayout
             android:id="@+id/profile_relLayout2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="50dp"
             android:layout_marginTop="20dp"
             android:layout_below="@id/profile_relLayout1">
 
@@ -61,7 +58,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerHorizontal="true"
-                        android:text="Hello World"
+                        android:text="Cute Babe"
                         android:textColor="#000"
                         android:textSize="24sp"
                         android:textStyle="bold" />
@@ -84,7 +81,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/profile_linLayout1"
-                android:orientation="horizontal"
+                android:orientation="vertical"
                 android:layout_marginTop="30dp"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp">
@@ -94,16 +91,28 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="..."
+                    android:textAllCaps="false"
                     android:background="@color/colorPrimary"
+                    android:textColor="@color/colorPrimaryDark"
+                    android:textSize="22sp"
                     android:onClick="editInfo"/>
+
+                <Button
+                    android:id = "@+id/button_reset_inhaler"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:background="@color/colorPrimary"
+                    android:textAllCaps="false"
+                    android:textColor="@color/colorPrimaryDark"
+                    android:textSize="22sp"
+                    android:text ="Reset Inhaler"/>
 
 
             </LinearLayout>
 
         </RelativeLayout>
 
-        <!-- bottom navigation -->
-        <include layout="@layout/layout_bottom_navigation"/>
 
     </RelativeLayout>
 

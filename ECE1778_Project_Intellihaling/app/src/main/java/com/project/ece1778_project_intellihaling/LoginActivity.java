@@ -32,6 +32,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 public class LoginActivity extends AppCompatActivity {
 
     private static final String TAG = "LoginActivity";
+    private static final int REQUEST_LOGIN = 0;
 
     private Context mContext;
 
@@ -117,7 +118,7 @@ public class LoginActivity extends AppCompatActivity {
                 @Override
                 public void onCallback(String role) {
                     Log.d(TAG, "onCallback: " + role);
-                    enterProfileActivity();
+                    enterMainActivity();
                 }
             });
         }
@@ -204,7 +205,7 @@ public class LoginActivity extends AppCompatActivity {
 
                                     showProgress(false);
                                     Log.d(TAG, "onCallback: " + role);
-                                    enterProfileActivity();
+                                    enterMainActivity();
                                 }
                             });
                         }
@@ -240,12 +241,11 @@ public class LoginActivity extends AppCompatActivity {
             void onCallback(String role);
     }
 
-    private void enterProfileActivity(){
+    private void enterMainActivity(){
 
-        Intent intent = new Intent(LoginActivity.this, ProfileActivity.class);
+        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
         intent.putExtra("role", role);
-        startActivity(intent);
-        finish();
+        startActivityForResult(intent, REQUEST_LOGIN);
     }
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
@@ -287,6 +287,18 @@ public class LoginActivity extends AppCompatActivity {
             mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
             mProgressLogingIn.setVisibility(show ? View.VISIBLE : View.GONE);
             mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == REQUEST_LOGIN) {
+            if (resultCode == RESULT_OK) {
+
+                // TODO: Implement signup logic
+                // Default
+                this.finish();
+            }
         }
     }
 

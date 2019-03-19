@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/red">
+    android:background="@color/red"
+    tools:context=".EmergencyActivity">
 
     <LinearLayout
         android:orientation="vertical"
@@ -13,7 +16,7 @@
         android:paddingRight="24dp">
 
         <TextView
-            android:id="@id/instruction_time"
+            android:id="@+id/em_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -24,16 +27,15 @@
         </TextView>
 
         <ImageView
-            android:id="@+id/instruction_emergency_img_1"
+            android:id="@+id/emergency_img_1"
             android:layout_width="250dp"
             android:layout_height="200dp"
             android:layout_gravity="center"
-            android:src="@mipmap/img_5"
-            android:layout_centerHorizontal="true"
+            android:src="@mipmap/img_ambulence"
             android:layout_marginTop="10dp" />
 
         <TextView
-            android:id="@+id/instruction_emergency_text_1"
+            android:id="@+id/emergency_text_1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -45,7 +47,7 @@
 
 
         <TextView
-            android:id="@+id/instruction_emergency_text_2"
+            android:id="@+id/emergency_text_2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -56,7 +58,7 @@
         </TextView>
 
         <Button
-            android:id="@+id/btn_instruction_fail_time_count"
+            android:id="@+id/btn_emergency"
             android:layout_width="150dp"
             android:layout_height="150dp"
             android:layout_gravity="center"

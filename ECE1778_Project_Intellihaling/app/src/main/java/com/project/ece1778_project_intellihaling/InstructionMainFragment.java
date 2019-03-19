@@ -13,6 +13,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -25,6 +27,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.project.ece1778_project_intellihaling.model.Child;
 import com.project.ece1778_project_intellihaling.model.Inhaler;
+import com.project.ece1778_project_intellihaling.model.OnceAttackRecord;
 import com.project.ece1778_project_intellihaling.model.OnceAttackRecordStatic;
 
 import java.text.SimpleDateFormat;
@@ -34,12 +37,15 @@ import java.util.Date;
 public class InstructionMainFragment extends Fragment {
 
     private static final String TAG = "InstructionMainFragment";
+    private static final String ASTHMA_REMINDER = "asthmaReminder";
 
     private static final int FRAG_MAIN_INDEX = 0;
     private static final int FRAG_GUIDE_INDEX = 1;
-    private static final int FRAG_PASS_INDEX = 2;
-    private static final int FRAG_FAIL_INDEX = 3;
-    private static final int FRAG_EMER_INDEX = 4;
+    private static final int FRAG_HEART_INDEX = 2;
+    private static final int FRAG_GREEN_INDEX = 3;
+    private static final int FRAG_YELLOW_INDEX = 4;
+    private static final int FRAG_RED_INDEX = 5;
+
 
     //firebase
     private FirebaseAuth mAuth;
@@ -119,12 +125,31 @@ public class InstructionMainFragment extends Fragment {
             @Override
             public void onClick(View view) {
 
+                //send notification
+                mDatabase.collection(ASTHMA_REMINDER).document(uID)
+                        .update("flag",String.valueOf(System.currentTimeMillis()))
+                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                Log.d(TAG, "onSuccess: success");
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Log.w(TAG, "onFailure: failure", e);
+                            }
+                        });
+
                 //init attach record file
                 OnceAttackRecordStatic.setChildUid(uID);
 
                 OnceAttackRecordStatic.setChildHeight(childInfo.getHeight());
+
+                //set inhaler remain puffs medicine
                 OnceAttackRecordStatic.setInhalorMargin(inhalorInfo.getMargin());
 
+                //set start time
                 long timeMillis = System.currentTimeMillis();
                 String timeStamp = String.valueOf(timeMillis);
                 OnceAttackRecordStatic.setAttackTimestamp(timeStamp);
@@ -146,7 +171,13 @@ public class InstructionMainFragment extends Fragment {
                 OnceAttackRecordStatic.setAttackTimestampHour(hour);
                 OnceAttackRecordStatic.setAttackTimestampMinute(minute);
 
+                //init the inhaling count
                 OnceAttackRecordStatic.setCount(0);
+
+                //init record
+                OnceAttackRecordStatic.setPeakflow(null);
+                OnceAttackRecordStatic.setFev(null);
+                OnceAttackRecordStatic.setPeakflowAndFevTimestamp(null);
 
                 mActivity.setViewPager(FRAG_GUIDE_INDEX);
             }

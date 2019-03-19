@@ -2,6 +2,8 @@ package com.project.ece1778_project_intellihaling.util;
 
 
 import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -15,6 +17,7 @@ import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.formatter.IAxisValueFormatter;
 import com.google.firebase.auth.FirebaseAuth;
+import com.project.ece1778_project_intellihaling.AsthmaAttackDetailActivity;
 import com.project.ece1778_project_intellihaling.R;
 import com.project.ece1778_project_intellihaling.model.AirflowDataManager;
 import com.project.ece1778_project_intellihaling.model.OnceAttackRecord;
@@ -26,6 +29,7 @@ import java.util.Date;
 import java.util.List;
 
 public class AttackRecordAdapter extends RecyclerView.Adapter<AttackRecordAdapter.ViewHolder> {
+
     private Context mContext;
     private FirebaseAuth mAuth;
     private String mUid;
@@ -65,45 +69,20 @@ public class AttackRecordAdapter extends RecyclerView.Adapter<AttackRecordAdapte
         viewHolder.btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                OnceAttackRecord onceAttackRecord = attackDocsList.get(i);
-                setChartFlow(onceAttackRecord,viewHolder.mLineChartFEV, onceAttackRecord.getFev());
-                setChartFlow(onceAttackRecord,viewHolder.mLineChartPeakflow, onceAttackRecord.getPeakflow());
+                Intent intent = new Intent(mContext, AsthmaAttackDetailActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putString("peakFlow",attackDocsList.get(i).getPeakflow());
+                bundle.putString("fev",attackDocsList.get(i).getFev());
+                bundle.putString("attackTimeStamp",attackDocsList.get(i).getPeakflowAndfevTimestamp());
+                bundle.putString("uId",attackDocsList.get(i).getuId());
+                intent.putExtras(bundle);
+                mContext.startActivity(intent);
             }
         });
     }
-    private void setChartFlow(OnceAttackRecord onceAttackRecord, LineChart mLineChart, String flowVolumn){
 
-        try {
-            AirflowDataManager airflowDataManager = new AirflowDataManager(onceAttackRecord.getuId()
-                    ,flowVolumn, onceAttackRecord.getPeakflowAndfevTimestamp());
-            //the content of timesatmpList array like this {2019-2-17 22:46,22:57,23:15}
-            List<String> timestampList = airflowDataManager.getTimestampList();
-            //formatter is used for customize X axis according to timestampList;
-            final String[] strings = airflowDataManager.xAxisLabelArray(timestampList);
-            IAxisValueFormatter formatter = new IAxisValueFormatter() {
-                @Override
-                public String getFormattedValue(float value, AxisBase axis) {
-                    return strings[(int) value];
-                }
-            };
-            xAxisMessageofChart(mLineChart,formatter);
-            mLineChart.setData(airflowDataManager.data);
-            mLineChart.invalidate();
-            //just to show fev, not real fev
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
 
-    }
 
-    private void xAxisMessageofChart(LineChart lineChart,IAxisValueFormatter formatter) {
-        XAxis xAxis = lineChart.getXAxis();
-        xAxis.setEnabled(true);
-        xAxis.setGranularity(1f);
-        xAxis.setValueFormatter(formatter);
-        YAxis yAxis = lineChart.getAxisLeft();
-        yAxis.setTextSize(15f);
-    }
     private String timeToString(Long millisecond){
 
         Date d = new Date(millisecond);
