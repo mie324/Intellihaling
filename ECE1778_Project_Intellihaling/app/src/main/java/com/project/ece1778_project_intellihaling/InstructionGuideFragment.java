@@ -260,10 +260,15 @@ public class InstructionGuideFragment extends Fragment {
         int attRef = AttackReferenceStatic.attRefMap.get(height);
 
         //compare to the form and check whether it is a valid attack
-        if(pkNumInt < attRef * 0.5 && fevNumInt < 60) {
+        if(pkNumInt < attRef * 0.5) {
+            flag = -1;
+        }else if(fevNumInt < 60){
             flag = -1;
 
-        }else if(pkNumInt >= attRef * 0.5  && pkNumInt <= attRef * 0.8 && fevNumInt >= 60 && fevNumInt < 80){
+        }else if(pkNumInt >= attRef * 0.5  && pkNumInt <= attRef * 0.8) {
+            flag = 0;
+
+        }else if (fevNumInt >= 60 && fevNumInt < 80){
             flag = 0;
 
         }else{

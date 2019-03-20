@@ -94,14 +94,11 @@ public class AsthmaAttackDetailActivity extends AppCompatActivity {
             //chart data from recyclerview
             mIntentFromRecyclerView = getIntent();
             mDataFromRecyclerView = mIntentFromRecyclerView.getExtras();
-            mDocRef = mDatabase.collection("instruction")
-                    .document(mDataFromRecyclerView.getString("uId"));
 
         } else if (intent.hasExtra("childUID")) {
 
             //chart data will be fetched from database
             childUID = intent.getStringExtra("childUID");
-            mDocRef = mDatabase.collection("instruction").document(childUID);
 
         }else{
             //exception
@@ -258,17 +255,25 @@ public class AsthmaAttackDetailActivity extends AppCompatActivity {
     }
 
     public void getData(final AsynchronousDealerInterface asynchronousDealer) {
+
         mDatabase.collection("attackRecord").whereEqualTo("childUid", childUID).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
                     List<OnceAttackRecord> list = new ArrayList<>();
                     for (QueryDocumentSnapshot document : task.getResult()) {
-                        OnceAttackRecord onceAttackRecord = new OnceAttackRecord(document.getString("childUid")
-                                , document.getString("attackTimestamp"), document.getString("attackTimestampYear")
-                                , document.getString("attackTimestampMonth"), document.getString("attackTimestampDay"), document.getString("peakflow")
-                                , document.getString("fev"), document.getString("peakflowAndFevTimestamp"));
-                        list.add(onceAttackRecord);
+
+                        String tsTmp = document.getString("peakflowAndFevTimestamp");
+                        if(tsTmp.contains("/")){
+                            OnceAttackRecord onceAttackRecord = new OnceAttackRecord(document.getString("childUid"),
+                                    document.getString("attackTimestamp"), document.getString("attackTimestampYear"),
+                                    document.getString("attackTimestampMonth"), document.getString("attackTimestampDay"),
+                                    document.getString("peakflow"),
+                                    document.getString("fev"),
+                                    document.getString("peakflowAndFevTimestamp"));
+
+                            list.add(onceAttackRecord);
+                        }
                     }
 
                     asynchronousDealer.listGenerator(list);

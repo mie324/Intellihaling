@@ -40,6 +40,9 @@ public class MainActivity extends AppCompatActivity {
     private static final String INHALER_REMINDER = "inhalerDecreaseReminder";
     private static final String FINE_REMINDER = "fineReminder";
 
+    private static final int MARGIN_MIN = 20;
+    private static final int REMAINDAYS_MIN = 5;
+
     private Button btn_enter;
     private static final int REQUEST_LOGIN = 0;
     private TextView remainingPuffs;
@@ -114,8 +117,17 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onBackPressed(){
+    public void onResume(){
+        super.onResume();
 
+        snapShotFlag = false;
+    }
+
+    @Override
+    public void onBackPressed(){
+        super.onBackPressed();
+
+        finish();
     }
 
     private void detectRole(final FireStoreCallback fireStoreCallback) {
@@ -152,9 +164,24 @@ public class MainActivity extends AppCompatActivity {
 
         mMargin.setText(margin);
         mRemainingDays.setText(remainingDays);
+
+        //send notification when inhaler is running out
+        String content = null;
+        if(Integer.valueOf(margin) < MARGIN_MIN){
+            content = "Less than 20 puffs left in your inhaler, remember to get a new one soon!";
+        }
+
+        if (Integer.valueOf(remainingDays) < REMAINDAYS_MIN){
+            content = "Inhaler will expired in 5 days! remember to get a new one soon!";
+        }
+
+        if(content != null){
+            sendNotification(content);
+        }
     }
 
     public void getInhalerInfo(final InhalerInfoSetInterface inhalerInfoSetInterface){
+
         mDatabase.collection("inhaler").whereEqualTo("childUid", childUID).get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -207,8 +234,9 @@ public class MainActivity extends AppCompatActivity {
                             case FINE_REMINDER:
                                 content = "Your child is fine now!";
                                 break;
-
                         }
+
+                        snapShotFlag = false;
                         sendNotification(content);
                     }else{
                         snapShotFlag =true;
