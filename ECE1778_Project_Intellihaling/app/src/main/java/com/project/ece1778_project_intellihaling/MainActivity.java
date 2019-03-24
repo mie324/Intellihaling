@@ -54,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
     private String childUID;
     private String role;
 
-    private boolean snapShotFlag = false;
+    //private boolean snapShotFlag = false;
 
     private Inhaler mInhaler;
     private TextView mMargin;
@@ -78,10 +78,11 @@ public class MainActivity extends AppCompatActivity {
         mDatabase = FirebaseFirestore.getInstance();
 
     }
-
+    private int flag;
     @Override
     protected void onStart(){
         super.onStart();
+        flag = 0;
 
         // Check if user is signed in (non-null)
         FirebaseUser currentUser = mAuth.getCurrentUser();
@@ -120,7 +121,7 @@ public class MainActivity extends AppCompatActivity {
     public void onResume(){
         super.onResume();
 
-        snapShotFlag = false;
+        //snapShotFlag = false;
     }
 
     @Override
@@ -219,7 +220,6 @@ public class MainActivity extends AppCompatActivity {
                 }
 
                 if(documentSnapshot != null && documentSnapshot.exists()){
-                    if(snapShotFlag){
 
                         String content = "";
                         switch(collectionPath){
@@ -236,11 +236,13 @@ public class MainActivity extends AppCompatActivity {
                                 break;
                         }
 
-                        snapShotFlag = false;
-                        sendNotification(content);
-                    }else{
-                        snapShotFlag =true;
-                    }
+                        //using flag to judge the legality of notification
+                        if(flag > 2){
+                            sendNotification(content);
+                        }
+                        flag++;
+
+
                 }
             }
         });
