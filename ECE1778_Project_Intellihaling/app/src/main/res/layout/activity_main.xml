@@ -97,7 +97,8 @@
             android:layout_height="27mm"
             android:layout_marginLeft="15dp"
             android:layout_alignParentLeft="true"
-            android:background="@color/orange"
+
+            android:background="@drawable/asthma_on_main"
             android:onClick="main_enter_start_fr">
 
             <TextView
@@ -121,7 +122,7 @@
             android:layout_height="27mm"
             android:layout_marginRight="15dp"
             android:layout_alignParentRight="true"
-            android:background="@color/green"
+            android:background="@drawable/chart_on_main"
             android:onClick="main_enter_chart_fr">
 
             <TextView
@@ -154,7 +155,7 @@
             android:layout_height="22mm"
             android:layout_marginLeft="15dp"
             android:layout_marginRight="15dp"
-            android:background="@color/red"
+            android:background="@drawable/ambulance_on_main"
             android:onClick="main_enter_help_fr">
 
             <TextView

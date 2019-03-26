@@ -117,7 +117,7 @@ public class AsthmaAttackDetailActivity extends AppCompatActivity {
                 public void listGenerator(List<OnceAttackRecord> list) {
                     mAirflowDataManagerList = list;
 
-                    AttackRecordAdapter adapter =new AttackRecordAdapter(getApplicationContext(), mAirflowDataManagerList);
+                    AttackRecordAdapter adapter =new AttackRecordAdapter(getApplicationContext(),AsthmaAttackDetailActivity.this, mAirflowDataManagerList);
                     mRecyclerView.setAdapter(adapter);
 
                     Collections.sort(mAirflowDataManagerList, new Comparator<OnceAttackRecord>() {
@@ -149,7 +149,7 @@ public class AsthmaAttackDetailActivity extends AppCompatActivity {
                     mAirflowDataManagerList = list;
 
                     //将attackTimestamp转化成真实时间 还有原始数据 排序 并存入List 之后交给adapter渲染
-                    AttackRecordAdapter adapter = new AttackRecordAdapter(getApplicationContext(), mAirflowDataManagerList);
+                    AttackRecordAdapter adapter = new AttackRecordAdapter(getApplicationContext(),AsthmaAttackDetailActivity.this, mAirflowDataManagerList);
 
                     mRecyclerView.setAdapter(adapter);
                     String peakflowVolumn = mDataFromRecyclerView.getString("peakFlow");

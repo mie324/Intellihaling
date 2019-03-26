@@ -67,7 +67,9 @@
             android:text="Dialing..."
             android:textSize="30sp"
             android:textAllCaps="true"
-            android:textColor="#fff" />
+            android:textColor="#fff"
+            android:onClick="onClickEmergencyCall"/>
+
 
     </LinearLayout>
 

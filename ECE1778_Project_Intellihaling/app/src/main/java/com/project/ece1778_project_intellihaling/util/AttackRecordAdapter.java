@@ -1,6 +1,7 @@
 package com.project.ece1778_project_intellihaling.util;
 
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -34,13 +35,14 @@ public class AttackRecordAdapter extends RecyclerView.Adapter<AttackRecordAdapte
     private FirebaseAuth mAuth;
     private String mUid;
     private List<OnceAttackRecord> attackDocsList;
+    private Activity mActivity;
 
-    public AttackRecordAdapter(Context context, List<OnceAttackRecord> attackDocsList) {
+    public AttackRecordAdapter(Context context,Context activityContext, List<OnceAttackRecord> attackDocsList) {
         this.mContext = context;
         mAuth = FirebaseAuth.getInstance();
         mUid = mAuth.getUid();
         this.attackDocsList = attackDocsList;
-
+        mActivity = (Activity) activityContext;
         //judge if this user is child
         //we assume that the user is a child
         //then we fetch all record of the child from database
@@ -76,7 +78,10 @@ public class AttackRecordAdapter extends RecyclerView.Adapter<AttackRecordAdapte
                 bundle.putString("attackTimeStamp",attackDocsList.get(i).getPeakflowAndfevTimestamp());
                 bundle.putString("uId",attackDocsList.get(i).getuId());
                 intent.putExtras(bundle);
+                mActivity.finish();
+
                 mContext.startActivity(intent);
+
             }
         });
     }
