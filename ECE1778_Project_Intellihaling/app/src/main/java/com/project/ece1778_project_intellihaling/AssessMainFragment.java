@@ -1,7 +1,5 @@
 package com.project.ece1778_project_intellihaling;
 
-import android.app.Activity;
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -24,27 +22,27 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.google.firebase.storage.FirebaseStorage;
 import com.project.ece1778_project_intellihaling.model.Child;
 import com.project.ece1778_project_intellihaling.model.Inhaler;
-import com.project.ece1778_project_intellihaling.model.OnceAttackRecord;
 import com.project.ece1778_project_intellihaling.model.OnceAttackRecordStatic;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
-public class InstructionMainFragment extends Fragment {
+public class AssessMainFragment extends Fragment {
 
-    private static final String TAG = "InstructionMainFragment";
+    private static final String TAG = "AssessMainFragment";
     private static final String ASTHMA_REMINDER = "asthmaReminder";
 
     private static final int FRAG_MAIN_INDEX = 0;
     private static final int FRAG_GUIDE_INDEX = 1;
     private static final int FRAG_HEART_INDEX = 2;
     private static final int FRAG_GREEN_INDEX = 3;
-    private static final int FRAG_YELLOW_INDEX = 4;
-    private static final int FRAG_RED_INDEX = 5;
+
+    private static final int FRAG_YELLOW_INDEX = 2;
+    private static final int FRAG_RED_INDEX = 3;
+    private static final int FRAG_EMER_INDEX = 4;;
 
 
     //firebase
@@ -63,22 +61,22 @@ public class InstructionMainFragment extends Fragment {
 
     //vars
     View view;
-    private StartActivity mActivity;
+    private AssessActivity mActivity;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mActivity = (StartActivity) getActivity();
+        mActivity = (AssessActivity) getActivity();
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        view = inflater.inflate(R.layout.fragment_instruction_main, container, false);
+        view = inflater.inflate(R.layout.fragment_assess_main, container, false);
 
-        confirmBtn = (Button)view.findViewById(R.id.btn_instruction_main_start);
+        confirmBtn = (Button)view.findViewById(R.id.btn_assess_main_start);
 
         //setting firebase, get UID
         mAuth = FirebaseAuth.getInstance();

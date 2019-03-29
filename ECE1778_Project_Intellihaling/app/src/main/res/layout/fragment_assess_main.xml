@@ -16,12 +16,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text=" Let’s take care of your asthma symptom"
+            android:text=" Let’s check if you need an inhaler"
             android:gravity="center"
             android:textSize="30sp"/>
 
         <Button
-            android:id="@+id/btn_instruction_main_start"
+            android:id="@+id/btn_assess_main_start"
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:layout_gravity="center"

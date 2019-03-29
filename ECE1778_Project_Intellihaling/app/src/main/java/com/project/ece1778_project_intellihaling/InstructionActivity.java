@@ -8,26 +8,20 @@ import android.os.Bundle;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.storage.FirebaseStorage;
 import com.project.ece1778_project_intellihaling.model.Child;
 import com.project.ece1778_project_intellihaling.util.MyFragmentPagerAdapter;
 
-public class StartActivity extends AppCompatActivity {
+public class InstructionActivity extends AppCompatActivity {
 
-    private static final String TAG = "StartActivity";
+    private static final String TAG = "ManagementActivity";
 
-    private static final int FRAG_MAIN_INDEX = 0;
-    private static final int FRAG_GUIDE_INDEX = 1;
-    private static final int FRAG_PASS_INDEX = 2;
-    private static final int FRAG_FAIL_INDEX = 3;
+    private static final int FRAG_GUIDE_INDEX = 0;
+    private static final int FRAG_GREEN_INDEX = 1;
+    private static final int FRAG_YELLOW_INDEX = 2;
+    private static final int FRAG_RED_INDEX = 3;
 
     //firebase
-    private FirebaseAuth mAuth;
-    private FirebaseFirestore mDatabase;
-    private DocumentReference docRef;
-    private FirebaseStorage mStorage;
+    private FirebaseAuth mAuth;;
     private String uID;
 
     private Context mContext;
@@ -37,8 +31,8 @@ public class StartActivity extends AppCompatActivity {
 
     //fragment
     private ViewPager mViewPager;
-    private InstructionMainFragment InsMainFrag;
-    private InstructionHeartRateFragment InsHeartFrag;
+//    private InstructionMainFragment InsMainFrag;
+//    private InstructionHeartRateFragment InsHeartFrag;
     private InstructionGuideFragment InsGuideFrag;
     private InstructionResultGreenFragment InsGreenFrag;
     private InstructionResultYellowFragment InsYellowFrag;
@@ -48,13 +42,12 @@ public class StartActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_start);
+        setContentView(R.layout.activity_instruction);
 
-        mContext = StartActivity.this;
+        mContext = InstructionActivity.this;
 
         //setting firebase, get UID
         mAuth = FirebaseAuth.getInstance();
-        mDatabase = FirebaseFirestore.getInstance();
 
         init();
     }
@@ -75,9 +68,10 @@ public class StartActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        if (mViewPager.getCurrentItem() == 0) {
+        if (mViewPager.getCurrentItem() == FRAG_GUIDE_INDEX) {
             // If the user is currently looking at the first step, allow the system to handle the
             // Back button. This calls finish() on this activity and pops the back stack.
+            this.finish();
             super.onBackPressed();
         } else {
             // Otherwise, select the previous step.
@@ -92,7 +86,7 @@ public class StartActivity extends AppCompatActivity {
         finish();
         Intent intent = null;
         if(uID == ""){
-            intent = new Intent(StartActivity.this, MainActivity.class);
+            intent = new Intent(InstructionActivity.this, MainActivity.class);
             finish();
         }
         else
@@ -103,36 +97,46 @@ public class StartActivity extends AppCompatActivity {
 
     private void init(){
 
-        InsMainFrag = new InstructionMainFragment();
+//        InsMainFrag = new InstructionMainFragment();
         InsGuideFrag = new InstructionGuideFragment();
-        InsHeartFrag = new InstructionHeartRateFragment();
+//        InsHeartFrag = new InstructionHeartRateFragment();
         InsGreenFrag = new InstructionResultGreenFragment();
         InsYellowFrag = new InstructionResultYellowFragment();
         InsRedFrag = new InstructionResultRedFragment();
 
-        mViewPager = (ViewPager)findViewById(R.id.start_container);
+        mViewPager = (ViewPager)findViewById(R.id.management_container);
         //set up pager
         setupViewPager(mViewPager);
 
-        mViewPager.setCurrentItem(FRAG_MAIN_INDEX);
+        Intent intent = getIntent();
+        String pageFlag = intent.getStringExtra("pageFlag");
+
+        if(!intent.hasExtra("pageFlag")){
+            mViewPager.setCurrentItem(FRAG_GUIDE_INDEX);
+
+        }else{
+            switch (pageFlag){
+                case "2":
+                    mViewPager.setCurrentItem(FRAG_YELLOW_INDEX);
+                    break;
+                case "3":
+                    mViewPager.setCurrentItem(FRAG_RED_INDEX);
+                    break;
+            }
+        }
 
     }
 
     private void setupViewPager(ViewPager viewPager){
         MyFragmentPagerAdapter adpter = new MyFragmentPagerAdapter(getSupportFragmentManager());
 
-        adpter.addFragment(InsMainFrag); //index 0
+        adpter.addFragment(InsGuideFrag); //index 0
 
-        adpter.addFragment(InsGuideFrag); //index 1
-        adpter.addFragment(InsHeartFrag); //index 2
-
-        adpter.addFragment(InsGreenFrag); //index 3
-        adpter.addFragment(InsYellowFrag); //index 4
-        adpter.addFragment(InsRedFrag); //index 5
-
+        adpter.addFragment(InsGreenFrag); //index 1
+        adpter.addFragment(InsYellowFrag); //index 2
+        adpter.addFragment(InsRedFrag); //index 3
 
         viewPager.setAdapter(adpter);
-
     }
 
     public void setViewPager(int fragmentNumber){
@@ -141,7 +145,7 @@ public class StartActivity extends AppCompatActivity {
 
     private void enterMainActivity(){
 
-        Intent intent = new Intent(StartActivity.this, MainActivity.class);
+        Intent intent = new Intent(InstructionActivity.this, MainActivity.class);
         startActivity(intent);
         finish();
     }

@@ -11,7 +11,7 @@ import android.widget.TextView;
 
 import com.project.ece1778_project_intellihaling.model.OnceAttackRecordStatic;
 
-public class InstructionHeartRateFragment extends Fragment {
+public class AssessHeartRateFragment extends Fragment {
 
     private static final String TAG = "InstructionHeartRateFra";
 
@@ -27,22 +27,22 @@ public class InstructionHeartRateFragment extends Fragment {
     private TextView CurrentTimeView;
 
     //vars
-    private StartActivity mActivity;
+    private AssessActivity mActivity;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mActivity = (StartActivity)getActivity();
+        mActivity = (AssessActivity)getActivity();
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.fragment_instruction_heart_rate, container, false);
+        View view = inflater.inflate(R.layout.fragment_assess_heart_rate, container, false);
 
-        CurrentTimeView = (TextView)view.findViewById(R.id.instruction_em_time);
+        CurrentTimeView = (TextView)view.findViewById(R.id.assess_em_time);
 
         setUp();
 
@@ -59,6 +59,5 @@ public class InstructionHeartRateFragment extends Fragment {
         String mm = OnceAttackRecordStatic.getAttackTimestampMinute();
         String currentTime = "Start: " + yyyy + "/" + MM + "/" + dd + " " + HH + ":" + mm;
         CurrentTimeView.setText(currentTime);
-
     }
 }

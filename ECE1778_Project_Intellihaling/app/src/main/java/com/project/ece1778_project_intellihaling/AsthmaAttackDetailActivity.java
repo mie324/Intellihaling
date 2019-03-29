@@ -66,6 +66,7 @@ public class AsthmaAttackDetailActivity extends AppCompatActivity {
     private Bundle mDataFromRecyclerView;
 
     private DocumentReference mDocRef;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -103,7 +104,6 @@ public class AsthmaAttackDetailActivity extends AppCompatActivity {
         }else{
             //exception
         }
-
     }
 
     @Override
@@ -117,7 +117,7 @@ public class AsthmaAttackDetailActivity extends AppCompatActivity {
                 public void listGenerator(List<OnceAttackRecord> list) {
                     mAirflowDataManagerList = list;
 
-                    AttackRecordAdapter adapter =new AttackRecordAdapter(getApplicationContext(), mAirflowDataManagerList);
+                    AttackRecordAdapter adapter =new AttackRecordAdapter(getApplicationContext(),AsthmaAttackDetailActivity.this, mAirflowDataManagerList);
                     mRecyclerView.setAdapter(adapter);
 
                     Collections.sort(mAirflowDataManagerList, new Comparator<OnceAttackRecord>() {
@@ -149,13 +149,22 @@ public class AsthmaAttackDetailActivity extends AppCompatActivity {
                     mAirflowDataManagerList = list;
 
                     //将attackTimestamp转化成真实时间 还有原始数据 排序 并存入List 之后交给adapter渲染
-                    AttackRecordAdapter adapter = new AttackRecordAdapter(getApplicationContext(), mAirflowDataManagerList);
+                    AttackRecordAdapter adapter = new AttackRecordAdapter(getApplicationContext(),AsthmaAttackDetailActivity.this, mAirflowDataManagerList);
+
+                    Collections.sort(mAirflowDataManagerList, new Comparator<OnceAttackRecord>() {
+                        @Override
+                        public int compare(OnceAttackRecord o1, OnceAttackRecord o2) {
+                            return o2.getAttackTimestamp().compareTo(o1.getAttackTimestamp());
+                        }
+                    });
 
                     mRecyclerView.setAdapter(adapter);
+
                     String peakflowVolumn = mDataFromRecyclerView.getString("peakFlow");
                     String fevVolumn = mDataFromRecyclerView.getString("fev");
                     String timestamp = mDataFromRecyclerView.getString("attackTimeStamp");
                     String uId = mDataFromRecyclerView.getString("uId");
+
                     setChartDataFromRecyclerView(uId, mLineChartFEV, fevVolumn, timestamp);
                     setChartDataFromRecyclerView(uId, mLineChartPeakflow, peakflowVolumn, timestamp);
 
@@ -168,15 +177,6 @@ public class AsthmaAttackDetailActivity extends AppCompatActivity {
                 }
             });
         }
-    }
-
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-
-        finish();
-        Intent intent = new Intent(this, MainActivity.class);
-        startActivity(intent);
     }
 
     private void setChartDataFromRecyclerView(String uId, LineChart mLineChart, String flowVolumn, String timestamp) {
@@ -312,5 +312,4 @@ public class AsthmaAttackDetailActivity extends AppCompatActivity {
     private interface FireStoreCallback {
         void onCallback();
     }
-
 }

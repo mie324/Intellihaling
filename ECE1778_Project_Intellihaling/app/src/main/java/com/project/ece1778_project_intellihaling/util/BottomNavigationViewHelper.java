@@ -10,7 +10,7 @@ import android.view.MenuItem;
 
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 import com.project.ece1778_project_intellihaling.ChartActivity;
-import com.project.ece1778_project_intellihaling.StartActivity;
+import com.project.ece1778_project_intellihaling.InstructionActivity;
 import com.project.ece1778_project_intellihaling.ProfileActivity;
 import com.project.ece1778_project_intellihaling.R;
 
@@ -44,7 +44,7 @@ public class BottomNavigationViewHelper {
                         break;
 
                     case R.id.ic_start:
-                        Intent intent2 = new Intent(context, StartActivity.class);//ACTIVITY_NUM = 1
+                        Intent intent2 = new Intent(context, InstructionActivity.class);//ACTIVITY_NUM = 1
                         context.startActivity(intent2);
                         callingActivity.overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
                         callingActivity.finish();

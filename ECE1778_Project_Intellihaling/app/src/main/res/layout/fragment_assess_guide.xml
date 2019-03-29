@@ -17,7 +17,7 @@
             android:paddingRight="24dp">
 
             <TextView
-                android:id="@+id/instruction_guide_time"
+                android:id="@+id/assess_guide_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -28,7 +28,7 @@
             </TextView>
 
             <TextView
-                android:id="@+id/instruction_guide_text_msg_1"
+                android:id="@+id/assess_guide_text_msg_1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -39,7 +39,7 @@
                 android:textAlignment="center">
             </TextView>
             <TextView
-                android:id="@+id/instruction_guide_text_msg_2"
+                android:id="@+id/assess_guide_text_msg_2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -55,14 +55,14 @@
                 android:layout_marginTop="10dp">
 
                 <ImageView
-                    android:id="@+id/instruction_guide_img_1"
+                    android:id="@+id/assess_guide_img_1"
                     android:layout_width="200dp"
                     android:layout_height="150dp"
                     android:src="@mipmap/img_blow"
                     android:layout_alignParentLeft="true"/>
 
                 <ImageView
-                    android:id="@+id/instuction_guide_img_2"
+                    android:id="@+id/assess_guide_img_2"
                     android:layout_width="200dp"
                     android:layout_height="150dp"
                     android:layout_alignParentRight="true"
@@ -70,7 +70,7 @@
             </RelativeLayout>
 
             <TextView
-                android:id="@+id/instruction_guide_text_blow"
+                android:id="@+id/assess_guide_text_blow"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -88,7 +88,7 @@
                 android:layout_marginBottom="8dp">
 
                 <EditText
-                    android:id="@+id/instruction_guide_pfnum_enter"
+                    android:id="@+id/assess_guide_pfnum_enter"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/instruction_enter_pek"
@@ -108,7 +108,7 @@
                 android:layout_marginBottom="8dp">
 
                 <EditText
-                    android:id="@+id/instruction_guide_fevnum_enter"
+                    android:id="@+id/assess_guide_fevnum_enter"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/instruction_enter_fev"
@@ -122,7 +122,7 @@
             </android.support.design.widget.TextInputLayout>
 
             <Button
-                android:id="@+id/btn_instruction_guide_enter_done"
+                android:id="@+id/btn_assess_guide_enter_done"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 android:layout_gravity="center"

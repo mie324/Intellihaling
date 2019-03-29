@@ -9,11 +9,8 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -40,6 +37,12 @@ public class MainActivity extends AppCompatActivity {
     private static final String INHALER_REMINDER = "inhalerDecreaseReminder";
     private static final String FINE_REMINDER = "fineReminder";
 
+    private static final String reminder_inhaler_puff = "Less than 20 puffs left in your inhaler, remember to get a new one soon!";
+    private static final String reminder_inhaler_day = "Inhaler will expired in 5 days! remember to get a new one soon";
+    private static final String reminder_feel_short = "Your child is feeling shortness of breath now!";
+    private static final String reminder_take_puff = "Your child is taking 2 puffs from inhaler now!";
+    private static final String reminder_no_asthma = "Your child don\'t have any asthma symptom now.";
+
     private static final int MARGIN_MIN = 20;
     private static final int REMAINDAYS_MIN = 5;
 
@@ -54,11 +57,11 @@ public class MainActivity extends AppCompatActivity {
     private String childUID;
     private String role;
 
-    private boolean snapShotFlag = false;
-
     private Inhaler mInhaler;
     private TextView mMargin;
     private TextView mRemainingDays;
+
+    private int notFlag;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,6 +85,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStart(){
         super.onStart();
+
+        notFlag = 0;
 
         // Check if user is signed in (non-null)
         FirebaseUser currentUser = mAuth.getCurrentUser();
@@ -117,15 +122,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onResume(){
-        super.onResume();
-
-        snapShotFlag = false;
-    }
-
-    @Override
     public void onBackPressed(){
-        super.onBackPressed();
 
         finish();
     }
@@ -168,11 +165,11 @@ public class MainActivity extends AppCompatActivity {
         //send notification when inhaler is running out
         String content = null;
         if(Integer.valueOf(margin) < MARGIN_MIN){
-            content = "Less than 20 puffs left in your inhaler, remember to get a new one soon!";
+            content = reminder_inhaler_puff;
         }
 
         if (Integer.valueOf(remainingDays) < REMAINDAYS_MIN){
-            content = "Inhaler will expired in 5 days! remember to get a new one soon!";
+            content = reminder_inhaler_day;
         }
 
         if(content != null){
@@ -219,28 +216,27 @@ public class MainActivity extends AppCompatActivity {
                 }
 
                 if(documentSnapshot != null && documentSnapshot.exists()){
-                    if(snapShotFlag){
-
                         String content = "";
                         switch(collectionPath){
                             case ASTHMA_REMINDER:
-                                content = "Your child is feeling uncomfortable now!";
+                                content = reminder_feel_short;
                                 break;
 
                             case INHALER_REMINDER:
-                                content = "Your child is taking 2 puffs from inhaler now!";
+                                content = reminder_take_puff;
                                 break;
 
                             case FINE_REMINDER:
-                                content = "Your child is fine now!";
+                                content = reminder_no_asthma;
                                 break;
                         }
 
-                        snapShotFlag = false;
-                        sendNotification(content);
-                    }else{
-                        snapShotFlag =true;
-                    }
+                        //using flag to judge the legality of notification
+                        if(notFlag > 2){
+                            sendNotification(content);
+                        }
+
+                        notFlag++;
                 }
             }
         });
@@ -266,9 +262,9 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    public void main_enter_start_fr(View view){
+    public void main_enter_assess_fr(View view){
 
-        Intent intent = new Intent(MainActivity.this, StartActivity.class);
+        Intent intent = new Intent(MainActivity.this, AssessActivity.class);
         intent.putExtra("role", role);
         startActivityForResult(intent, REQUEST_LOGIN);
     }

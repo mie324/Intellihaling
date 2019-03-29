@@ -29,15 +29,19 @@ import com.project.ece1778_project_intellihaling.model.OnceAttackRecordStatic;
 import java.util.HashMap;
 import java.util.Map;
 
-public class InstructionResultGreenFragment extends Fragment {
+public class AssessResultGreenFragment extends Fragment {
 
-    private static final String TAG = "InstructionResultPassFr";
+    private static final String TAG = "AssessResultPassFr";
     private static final String FINE_REMINDER = "fineReminder";
 
-    private static final int FRAG_GUIDE_INDEX = 0;
-    private static final int FRAG_GREEN_INDEX = 1;
+    private static final int FRAG_MAIN_INDEX = 0;
+    private static final int FRAG_GUIDE_INDEX = 1;
+    private static final int FRAG_HEART_INDEX = 2;
+    private static final int FRAG_GREEN_INDEX = 3;
+
     private static final int FRAG_YELLOW_INDEX = 2;
     private static final int FRAG_RED_INDEX = 3;
+    private static final int FRAG_EMER_INDEX = 4;
 
     private View view;
 
@@ -50,22 +54,22 @@ public class InstructionResultGreenFragment extends Fragment {
     private String childUID;
 
     //vars
-    private InstructionActivity mActivity;
+    private AssessActivity mActivity;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mActivity = (InstructionActivity)getActivity();
+        mActivity = (AssessActivity)getActivity();
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_instruction_green, container, false);
+        view = inflater.inflate(R.layout.fragment_assess_green, container, false);
 
-        CurrentTimeView = (TextView)view.findViewById(R.id.instruction_green_time);
-        confirmBtn = (Button)view.findViewById(R.id.btn_instruction_green_done_btn);
+        CurrentTimeView = (TextView)view.findViewById(R.id.assess_green_time);
+        confirmBtn = (Button)view.findViewById(R.id.btn_assess_green_done_btn);
 
         mAuth = FirebaseAuth.getInstance();
         mDatabase = FirebaseFirestore.getInstance();
@@ -107,24 +111,6 @@ public class InstructionResultGreenFragment extends Fragment {
             @Override
             public void onClick(View view) {
 
-//                String tsTmp = OnceAttackRecordStatic.getAttackTimestamp();
-//                if(tsTmp.contains("/")){
-//
-//                    sendAttackRecord();
-//
-//                    sendInhalerMargin(new FireStoreCallback() {
-//                        @Override
-//                        public void onCallback() {
-//                            Log.d(TAG, "send inhaler Margin onCallback: " + OnceAttackRecordStatic.getInhalorMargin());
-//
-//                            mActivity.setViewPager(FRAG_MAIN_INDEX);
-//                        }
-//                    });
-//
-//                }else{
-//                    mActivity.setViewPager(FRAG_MAIN_INDEX);
-//                }
-
                 //send notification
                 mDatabase.collection(FINE_REMINDER).document(childUID).update("flag",String.valueOf(System.currentTimeMillis()))
                         .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -142,22 +128,13 @@ public class InstructionResultGreenFragment extends Fragment {
 
                 sendAttackRecord();
 
-                sendInhalerMargin(new FireStoreCallback() {
-                    @Override
-                    public void onCallback() {
-                        Log.d(TAG, "send inhaler Margin onCallback: " + OnceAttackRecordStatic.getInhalorMargin());
-
-                        enterMainActivity();
-                    }
-                });
+                mActivity.setViewPager(FRAG_MAIN_INDEX);
+//                enterMainActivity();
             }
         });
     }
 
     private void sendAttackRecord(){
-
-        String tsTmp = OnceAttackRecordStatic.getAttackTimestamp();
-        if(tsTmp.contains("/")){}
 
         //upload to cloud, update attack record
         Map<String, Object> newAttackRecord = new HashMap<>();
@@ -180,52 +157,11 @@ public class InstructionResultGreenFragment extends Fragment {
                 });
     }
 
-    private void sendInhalerMargin(final FireStoreCallback fireStoreCallback){
-
-        //upgrade inhaler margin
-        CollectionReference inhalorRef = mDatabase.collection("inhaler");
-        inhalorRef.whereEqualTo("childUid", childUID).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-
-                if (task.isSuccessful()){
-                    for (QueryDocumentSnapshot document : task.getResult()) {
-
-                        String inhalerUid = document.getId();
-
-                        DocumentReference docRef = mDatabase.collection("inhaler").document(inhalerUid);
-                        docRef.update("margin", OnceAttackRecordStatic.getInhalorMargin())
-                                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                    @Override
-                                    public void onSuccess(Void aVoid) {
-                                        Log.d(TAG, "DocumentSnapshot successfully updated!");
-
-                                        fireStoreCallback.onCallback();
-                                    }
-                                })
-                                .addOnFailureListener(new OnFailureListener() {
-                                    @Override
-                                    public void onFailure(@NonNull Exception e) {
-                                        Log.w(TAG, "Error updating document", e);
-                                    }
-                                });
-                    }
-                }else{
-                    Log.e(TAG, "CollectionReference task fail.", task.getException());
-                }
-            }
-        });
-    }
-
-    private interface FireStoreCallback{
-        void onCallback();
-    }
-
     private void enterMainActivity(){
-
-        mActivity.finish();
 
         Intent intent = new Intent(mActivity, MainActivity.class);
         startActivity(intent);
+        mActivity.finish();
     }
+
 }

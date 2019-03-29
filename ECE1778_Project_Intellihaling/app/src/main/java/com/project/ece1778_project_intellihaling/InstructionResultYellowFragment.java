@@ -25,12 +25,10 @@ public class InstructionResultYellowFragment extends Fragment {
     private static final String TAG = "InstructionResultYellow";
     private static final String INHALER_REMINDER = "inhalerDecreaseReminder";
 
-    private static final int FRAG_MAIN_INDEX = 0;
-    private static final int FRAG_GUIDE_INDEX = 1;
-    private static final int FRAG_GREEN_INDEX = 2;
-    private static final int FRAG_YELLOW_INDEX = 3;
-    private static final int FRAG_RED_INDEX = 4;
-    private static final int FRAG_EMER_INDEX = 5;
+    private static final int FRAG_GUIDE_INDEX = 0;
+    private static final int FRAG_GREEN_INDEX = 1;
+    private static final int FRAG_YELLOW_INDEX = 2;
+    private static final int FRAG_RED_INDEX = 3;
 
     private static final int COUNT_NUMBER = 5;
 
@@ -47,13 +45,13 @@ public class InstructionResultYellowFragment extends Fragment {
     private Button startBtn;
 
     //vars
-    private StartActivity mActivity;
+    private InstructionActivity mActivity;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mActivity = (StartActivity)getActivity();
+        mActivity = (InstructionActivity)getActivity();
     }
 
     @Nullable

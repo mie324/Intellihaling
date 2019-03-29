@@ -14,7 +14,7 @@
         android:gravity="center"
         android:text="INTELLIHALING"
         android:textSize="50sp"
-        android:textColor="@color/colorPrimaryDark"
+        android:textColor="@color/colorPrimary"
         android:layout_marginTop="15dp"/>
 
     <RelativeLayout
@@ -97,8 +97,8 @@
             android:layout_height="27mm"
             android:layout_marginLeft="15dp"
             android:layout_alignParentLeft="true"
-            android:background="@color/orange"
-            android:onClick="main_enter_start_fr">
+            android:background="@drawable/asthma_on_main"
+            android:onClick="main_enter_assess_fr">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -121,7 +121,7 @@
             android:layout_height="27mm"
             android:layout_marginRight="15dp"
             android:layout_alignParentRight="true"
-            android:background="@color/green"
+            android:background="@drawable/chart_on_main"
             android:onClick="main_enter_chart_fr">
 
             <TextView
@@ -154,7 +154,7 @@
             android:layout_height="22mm"
             android:layout_marginLeft="15dp"
             android:layout_marginRight="15dp"
-            android:background="@color/red"
+            android:background="@drawable/ambulance_on_main"
             android:onClick="main_enter_help_fr">
 
             <TextView

@@ -29,17 +29,23 @@
     <string name="instruction_not_feeling">Not Feeling Well?</string>
     <string name="instruction_blow">Blow into your peakflow/ spirometer 3x\nEnter the reading below</string>
     <string name="instruction_you_are_fine">You Are Breathing Well!</string>
-    <string name="instruction_do_not_need">You Do not need the inhaler!</string>
+    <string name="instruction_do_not_need">You do not need the inhaler!</string>
     <string name="instruction_might_have">Breathing difficult?\nYou have asthma symptom</string>
-    <string name="instruction_severe_difficult">Breathing severely difficult?\nYou have Asthma!</string>
+    <string name="instruction_severe_difficult">Breathing severely difficult?\nYou have Asthma Symptoms!</string>
     <string name="instruction_take_medicine">Please inhale 2 puffs and wait 1 min</string>
     <string name="instruction_feeling_difficulty">Are you having difficulty breathing?</string>
     <string name="instruction_need_inhaler">Let\'s check to see if you need an inhaler</string>
     <string name="instruction_enter_pek">Peakflow Reading</string>
-    <string name="instruction_enter_fev">FEV Reading</string>
-    <string name="instruction_emergency_1">You Are Having Asthma Attack!</string>
-    <string name="instruction_emergency_2">Don\'t Worry\nCalling 911 Right Now!</string>
+    <string name="instruction_enter_fev">FEV1 Reading</string>
+    <string name="instruction_emergency_1">Your Asthma is not better after 10 puffs of the inhaler!</string>
+    <string name="instruction_emergency_2">Don\'t Worry\n Emergency services are on their way!</string>
     <string name="instruction_exceed_10">If you still feel uncomfortable after 10 puffs, you need to go to hospital.</string>
+
+    <string name="reminder_inhaler_puff">Less than 20 puffs left in your inhaler, remember to get a new one soon!</string>
+    <string name="reminder_inhaler_day">Inhaler will expired in 5 days! remember to get a new one soon!</string>
+    <string name="reminder_feel_short">Your child is feeling shortness of breath now!</string>
+    <string name="reminder_take_puff">Your child is taking 2 puffs from inhaler now!</string>
+    <string name="reminder_no_asthma">Your child don\'t have any asthma symptom now.</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

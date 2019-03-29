@@ -8,8 +8,6 @@ import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -38,12 +36,10 @@ public class InstructionGuideFragment extends Fragment {
 
     private static final String TAG = "InstructionGuideFragmen";
 
-    private static final int FRAG_MAIN_INDEX = 0;
-    private static final int FRAG_GUIDE_INDEX = 1;
-    private static final int FRAG_HEART_INDEX = 2;
-    private static final int FRAG_GREEN_INDEX = 3;
-    private static final int FRAG_YELLOW_INDEX = 4;
-    private static final int FRAG_RED_INDEX = 5;
+    private static final int FRAG_GUIDE_INDEX = 0;
+    private static final int FRAG_GREEN_INDEX = 1;
+    private static final int FRAG_YELLOW_INDEX = 2;
+    private static final int FRAG_RED_INDEX = 3;
 
 
     private static final int ATTACK_COUNT_LIMIT = 5;
@@ -59,7 +55,7 @@ public class InstructionGuideFragment extends Fragment {
     private EditText PKEditText, FEVEditText;
     private Button confirmBtn;
 
-    private StartActivity mActivity;
+    private InstructionActivity mActivity;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -70,7 +66,7 @@ public class InstructionGuideFragment extends Fragment {
 
         }
 
-        mActivity = (StartActivity) getActivity();
+        mActivity = (InstructionActivity) getActivity();
     }
 
     @Nullable
@@ -111,16 +107,16 @@ public class InstructionGuideFragment extends Fragment {
         childUID = OnceAttackRecordStatic.getChildUid();
     }
 
-    @Override
-    public void setMenuVisibility(final boolean visible) {
-        super.setMenuVisibility(visible);
-        if (visible) {
-
-            CurrentTimeView = (TextView)view.findViewById(R.id.instruction_guide_time);
-            setUp();
-            
-        }
-    }
+//    @Override
+//    public void setMenuVisibility(final boolean visible) {
+//        super.setMenuVisibility(visible);
+//        if (visible) {
+//
+//            CurrentTimeView = (TextView)view.findViewById(R.id.instruction_guide_time);
+//            setUp();
+//
+//        }
+//    }
 
     public void setUp(){
 
@@ -343,6 +339,8 @@ public class InstructionGuideFragment extends Fragment {
     }
 
     private void enterEmergencyActivity() {
+
+        mActivity.finish();
 
         //fragment enter activity
         Intent intent = new Intent(mActivity, EmergencyActivity.class);
