@@ -101,7 +101,7 @@
                 android:layout_gravity="center"
                 android:layout_marginTop="15dp"
                 android:background="@drawable/circle"
-                android:text="CLick to Start Counting"
+                android:text="Click to Start Counting"
                 android:textSize="20sp"
                 android:textAllCaps="false"
                 android:textColor="#ffff" />

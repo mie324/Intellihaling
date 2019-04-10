@@ -3,6 +3,7 @@ apply plugin: 'com.google.gms.google-services'
 
 android {
     compileSdkVersion 27
+
     defaultConfig {
         applicationId "com.project.ece1778_project_intellihaling"
         minSdkVersion 23
@@ -10,7 +11,9 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        vectorDrawables.useSupportLibrary = true
     }
+
     buildTypes {
         release {
             minifyEnabled false
@@ -46,4 +49,8 @@ dependencies {
 
     //chart
     implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0-alpha'
+
+    //Heart rate
+    implementation project(':openCVLibrary24135')
+    implementation 'com.jjoe64:graphview:4.2.1'
 }

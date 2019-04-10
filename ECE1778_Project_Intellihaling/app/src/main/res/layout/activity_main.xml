@@ -93,11 +93,13 @@
         android:layout_marginBottom="15dp">
 
         <FrameLayout
+            android:id="@+id/main_assess_child_fr"
             android:layout_width="27mm"
             android:layout_height="27mm"
             android:layout_marginLeft="15dp"
             android:layout_alignParentLeft="true"
             android:background="@drawable/asthma_on_main"
+            android:visibility="invisible"
             android:onClick="main_enter_assess_fr">
 
             <TextView
@@ -117,11 +119,13 @@
         </FrameLayout>
 
         <FrameLayout
+            android:id="@+id/main_chart_child_fr"
             android:layout_width="27mm"
             android:layout_height="27mm"
             android:layout_marginRight="15dp"
             android:layout_alignParentRight="true"
             android:background="@drawable/chart_on_main"
+            android:visibility="invisible"
             android:onClick="main_enter_chart_fr">
 
             <TextView
@@ -138,6 +142,34 @@
                 android:layout_height="20mm"
                 android:layout_gravity="bottom|left"
                 android:src="@mipmap/img_chart"/>
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/main_chart_parent_fr"
+            android:layout_width="match_parent"
+            android:layout_height="27mm"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:background="@drawable/chart_on_main"
+            android:visibility="invisible"
+            android:onClick="main_enter_chart_parent_fr">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_gravity="center|left"
+                android:text="Chart"
+                android:textSize="20sp"/>
+
+            <ImageView
+                android:id="@+id/btn_main_6"
+                android:layout_width="22mm"
+                android:layout_height="22mm"
+                android:layout_marginRight="10dp"
+                android:layout_gravity="bottom|right"
+                android:src="@mipmap/img_chart"/>
+
         </FrameLayout>
 
     </RelativeLayout>

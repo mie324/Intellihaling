@@ -68,15 +68,18 @@ public class InstructionActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        if (mViewPager.getCurrentItem() == FRAG_GUIDE_INDEX) {
-            // If the user is currently looking at the first step, allow the system to handle the
-            // Back button. This calls finish() on this activity and pops the back stack.
-            this.finish();
-            super.onBackPressed();
-        } else {
-            // Otherwise, select the previous step.
-            mViewPager.setCurrentItem(mViewPager.getCurrentItem() - 1);
-        }
+//        if (mViewPager.getCurrentItem() == FRAG_GUIDE_INDEX) {
+//            // If the user is currently looking at the first step, allow the system to handle the
+//            // Back button. This calls finish() on this activity and pops the back stack.
+//            this.finish();
+//            super.onBackPressed();
+//        } else {
+//            // Otherwise, select the previous step.
+//            mViewPager.setCurrentItem(mViewPager.getCurrentItem() - 1);
+//        }
+
+        this.finish();
+        super.onBackPressed();
     }
 
     @Override
@@ -116,6 +119,9 @@ public class InstructionActivity extends AppCompatActivity {
 
         }else{
             switch (pageFlag){
+                case "1":
+                    mViewPager.setCurrentItem(FRAG_GREEN_INDEX);
+                    break;
                 case "2":
                     mViewPager.setCurrentItem(FRAG_YELLOW_INDEX);
                     break;

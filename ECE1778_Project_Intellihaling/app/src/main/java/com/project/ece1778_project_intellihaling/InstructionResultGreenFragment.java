@@ -107,24 +107,6 @@ public class InstructionResultGreenFragment extends Fragment {
             @Override
             public void onClick(View view) {
 
-//                String tsTmp = OnceAttackRecordStatic.getAttackTimestamp();
-//                if(tsTmp.contains("/")){
-//
-//                    sendAttackRecord();
-//
-//                    sendInhalerMargin(new FireStoreCallback() {
-//                        @Override
-//                        public void onCallback() {
-//                            Log.d(TAG, "send inhaler Margin onCallback: " + OnceAttackRecordStatic.getInhalorMargin());
-//
-//                            mActivity.setViewPager(FRAG_MAIN_INDEX);
-//                        }
-//                    });
-//
-//                }else{
-//                    mActivity.setViewPager(FRAG_MAIN_INDEX);
-//                }
-
                 //send notification
                 mDatabase.collection(FINE_REMINDER).document(childUID).update("flag",String.valueOf(System.currentTimeMillis()))
                         .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -155,9 +137,6 @@ public class InstructionResultGreenFragment extends Fragment {
     }
 
     private void sendAttackRecord(){
-
-        String tsTmp = OnceAttackRecordStatic.getAttackTimestamp();
-        if(tsTmp.contains("/")){}
 
         //upload to cloud, update attack record
         Map<String, Object> newAttackRecord = new HashMap<>();

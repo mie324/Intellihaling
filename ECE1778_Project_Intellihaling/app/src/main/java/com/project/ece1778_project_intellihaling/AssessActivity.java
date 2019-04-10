@@ -116,8 +116,8 @@ public class AssessActivity extends AppCompatActivity {
         adpter.addFragment(AssMainFr); //index 0
 
         adpter.addFragment(AssGuideFr); //index 1
-        adpter.addFragment(AssHeartFr); //index 2
-        adpter.addFragment(AssGreenFr);
+//        adpter.addFragment(AssHeartFr); //index 2
+//        adpter.addFragment(AssGreenFr);
 
         viewPager.setAdapter(adpter);
 

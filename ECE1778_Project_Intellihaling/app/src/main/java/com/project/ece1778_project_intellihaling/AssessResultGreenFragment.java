@@ -157,11 +157,4 @@ public class AssessResultGreenFragment extends Fragment {
                 });
     }
 
-    private void enterMainActivity(){
-
-        Intent intent = new Intent(mActivity, MainActivity.class);
-        startActivity(intent);
-        mActivity.finish();
-    }
-
 }

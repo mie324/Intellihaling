@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -36,20 +37,25 @@ public class MainActivity extends AppCompatActivity {
     private static final String ASTHMA_REMINDER = "asthmaReminder";
     private static final String INHALER_REMINDER = "inhalerDecreaseReminder";
     private static final String FINE_REMINDER = "fineReminder";
+    private static final String EMERGENCY_REMINDER = "emergencyReminder";
 
     private static final String reminder_inhaler_puff = "Less than 20 puffs left in your inhaler, remember to get a new one soon!";
     private static final String reminder_inhaler_day = "Inhaler will expired in 5 days! remember to get a new one soon";
     private static final String reminder_feel_short = "Your child is feeling shortness of breath now!";
     private static final String reminder_take_puff = "Your child is taking 2 puffs from inhaler now!";
     private static final String reminder_no_asthma = "Your child don\'t have any asthma symptom now.";
+    private static final String reminder_emergency = "You child is calling the emergency service, ambulance is on the way.";
 
     private static final int MARGIN_MIN = 20;
     private static final int REMAINDAYS_MIN = 5;
 
+    //UI
     private Button btn_enter;
     private static final int REQUEST_LOGIN = 0;
     private TextView remainingPuffs;
     private TextView remainingDays;
+    private FrameLayout fr_assess_child, fr_chart_child, fr_chart_parent;
+
     //firebase
     private FirebaseAuth mAuth;
     private FirebaseFirestore mDatabase;
@@ -73,6 +79,10 @@ public class MainActivity extends AppCompatActivity {
         remainingPuffs = findViewById(R.id.main_puff_textView);
         mMargin = findViewById(R.id.main_puff_textView);
         mRemainingDays = findViewById(R.id.main_expire_date_textView);
+
+        fr_assess_child = findViewById(R.id.main_assess_child_fr);
+        fr_chart_child = findViewById(R.id.main_chart_child_fr);
+        fr_chart_parent = findViewById(R.id.main_chart_parent_fr);
 
         btn_enter = (Button) this.findViewById(R.id.btn_mainEnter);
 
@@ -109,6 +119,7 @@ public class MainActivity extends AppCompatActivity {
                                 receiveNotification(ASTHMA_REMINDER);
                                 receiveNotification(INHALER_REMINDER);
                                 receiveNotification(FINE_REMINDER);
+                                receiveNotification(EMERGENCY_REMINDER);
                             }
                         }
                     });
@@ -124,7 +135,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onBackPressed(){
 
-        finish();
+        this.finish();
     }
 
     private void detectRole(final FireStoreCallback fireStoreCallback) {
@@ -139,9 +150,18 @@ public class MainActivity extends AppCompatActivity {
                     if (document.exists()) {
                         role = "parent";
                         childUID = (String) document.get("childsUid");
+
+                        fr_assess_child.setVisibility(View.INVISIBLE);
+                        fr_chart_child.setVisibility(View.INVISIBLE);
+                        fr_chart_parent.setVisibility(View.VISIBLE);
+
                     } else {
                         role = "child";
                         childUID = uID;
+
+                        fr_assess_child.setVisibility(View.VISIBLE);
+                        fr_chart_child.setVisibility(View.VISIBLE);
+                        fr_chart_parent.setVisibility(View.INVISIBLE);
                     }
 
                     fireStoreCallback.onCallback();
@@ -229,10 +249,14 @@ public class MainActivity extends AppCompatActivity {
                             case FINE_REMINDER:
                                 content = reminder_no_asthma;
                                 break;
+
+                            case EMERGENCY_REMINDER:
+                                content = reminder_emergency;
+                                break;
                         }
 
                         //using flag to judge the legality of notification
-                        if(notFlag > 2){
+                        if(notFlag > 3){
                             sendNotification(content);
                         }
 
@@ -287,6 +311,13 @@ public class MainActivity extends AppCompatActivity {
 
         Intent intent = new Intent(MainActivity.this, ProfileActivity.class);
         intent.putExtra("role", role);
+        startActivityForResult(intent, REQUEST_LOGIN);
+    }
+
+    public void main_enter_chart_parent_fr(View view){
+
+        Intent intent = new Intent(MainActivity.this, AsthmaAttackDetailActivity.class);
+        intent.putExtra("childUID", childUID);
         startActivityForResult(intent, REQUEST_LOGIN);
     }
 

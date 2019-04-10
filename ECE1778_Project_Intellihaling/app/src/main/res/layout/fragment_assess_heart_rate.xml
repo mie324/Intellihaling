@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:opencv="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <LinearLayout
@@ -21,6 +23,23 @@
             android:gravity="center"
             android:textAlignment="center">
         </TextView>
+
+        <TextView
+            android:id="@+id/hrDisplay"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:textSize="20sp"
+            android:text="Heart Rate" />
+
+        <com.project.ece1778_project_intellihaling.HeartBeatCameraView
+            android:id="@+id/OpenCVCameraView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:visibility="gone"
+            opencv:camera_id="back"
+            opencv:show_fps="true" />
 
     </LinearLayout>
 

@@ -42,7 +42,7 @@ public class InstructionGuideFragment extends Fragment {
     private static final int FRAG_RED_INDEX = 3;
 
 
-    private static final int ATTACK_COUNT_LIMIT = 5;
+    private static final int ATTACK_COUNT_LIMIT = 2;
 
     private View view;
 
@@ -340,11 +340,11 @@ public class InstructionGuideFragment extends Fragment {
 
     private void enterEmergencyActivity() {
 
-        mActivity.finish();
-
         //fragment enter activity
         Intent intent = new Intent(mActivity, EmergencyActivity.class);
         startActivity(intent);
+
+        getActivity().finish();
     }
 
 }

@@ -190,8 +190,8 @@ public class AssessGuideFragment extends Fragment {
 
                     //record inhalor margin
                     int currentMargin = Integer.valueOf(OnceAttackRecordStatic.getInhalorMargin());
-                    int newMargin = currentMargin - 2;
-                    OnceAttackRecordStatic.setInhalorMargin(String.valueOf(newMargin));
+//                    int newMargin = currentMargin - 2;
+                    OnceAttackRecordStatic.setInhalorMargin(String.valueOf(currentMargin));
 
                     //record count
                     int currentCount = OnceAttackRecordStatic.getCount();
@@ -199,17 +199,22 @@ public class AssessGuideFragment extends Fragment {
                     OnceAttackRecordStatic.setCount(currentCount);
 
                     int childHeight = Integer.valueOf(OnceAttackRecordStatic.getChildHeight());
-                    switch (checkAttack(childHeight, pkNum, fevNum)){
-                        case -1:
-                            enterActivity(FRAG_RED_INDEX);
-                            break;
-                        case 0:
-                            enterActivity(FRAG_YELLOW_INDEX);
-                            break;
-                        case 1:
-                            mActivity.setViewPager(FRAG_GREEN_INDEX);
-                            break;
-                    }
+
+//                    switch (checkAttack(childHeight, pkNum, fevNum)){
+//                        case -1:
+//                            enterActivity(FRAG_RED_INDEX);
+//                            break;
+//                        case 0:
+//                            enterActivity(FRAG_YELLOW_INDEX);
+//                            break;
+//                        case 1:
+//                            mActivity.setViewPager(FRAG_GREEN_INDEX);
+//                            break;
+//                    }
+
+                    Intent intent = new Intent(mActivity, HeatRateDetectActivity.class);
+                    startActivity(intent);
+                    mActivity.finish();
                 }
             }
         });
@@ -262,16 +267,6 @@ public class AssessGuideFragment extends Fragment {
         }
 
         startActivity(intent);
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == REQUEST_OK) {
-            if (resultCode == RESULT_OK) {
-                // Default
-                mActivity.finish();
-            }
-        }
     }
 
 }

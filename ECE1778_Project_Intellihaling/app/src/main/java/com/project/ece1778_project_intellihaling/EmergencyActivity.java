@@ -5,13 +5,20 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.provider.Settings;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.project.ece1778_project_intellihaling.model.OnceAttackRecordStatic;
 
 import java.text.SimpleDateFormat;
@@ -21,10 +28,16 @@ import java.util.Date;
 public class EmergencyActivity extends AppCompatActivity {
 
     private static final String TAG = "EmergencyActivity";
+    private static final String EMERGENCY_REMINDER = "emergencyReminder";
     private static final int MY_PERMISSIONS_REQUEST_CALL_PHONE = 1;
 
     //UI
     private TextView CurrentTimeView;
+
+    //firebase
+    private FirebaseAuth mAuth;
+    private FirebaseFirestore mDatabase;
+    private String uID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,7 +46,19 @@ public class EmergencyActivity extends AppCompatActivity {
 
         CurrentTimeView = findViewById(R.id.em_time);
 
+        //setting firebase, get UID
+        mAuth = FirebaseAuth.getInstance();
+        mDatabase = FirebaseFirestore.getInstance();
+
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        if(currentUser != null) {
+            uID = currentUser.getUid();
+        }
+
         setUp();
+
+        sendNotification();
+
         if (ContextCompat.checkSelfPermission(EmergencyActivity.this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
             // 没有获得授权，申请授权
             if (ActivityCompat.shouldShowRequestPermissionRationale(EmergencyActivity.this, Manifest.permission.CALL_PHONE)) {
@@ -42,7 +67,7 @@ public class EmergencyActivity extends AppCompatActivity {
                 //如果用户之前拒绝权限的时候勾选了对话框中”Don’t ask again”的选项,那么这个方法会返回false.
                 //如果设备策略禁止应用拥有这条权限, 这个方法也返回false.
                 // 弹窗需要解释为何需要该权限，再次请求授权
-                Toast.makeText(EmergencyActivity.this, "请授权！", Toast.LENGTH_LONG).show();
+                Toast.makeText(EmergencyActivity.this, "please authoritize！", Toast.LENGTH_LONG).show();
                 // 帮跳转到该应用的设置界面，让用户手动授权
                 Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
                 Uri uri = Uri.fromParts("package", getPackageName(), null);
@@ -58,15 +83,16 @@ public class EmergencyActivity extends AppCompatActivity {
         }
     }
 
-    private void CallPhone() {
+    @Override
+    public void onBackPressed(){
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
+        this.finish();
+    }
 
-            Intent intent = new Intent();
-            intent.setAction(Intent.ACTION_CALL);
-            //url:统一资源定位符
-            //uri:统一资源标示符（更广）
-            intent.setData(Uri.parse("tel:" + "911"));
-            //开启系统拨号器
-            startActivity(intent);
+    @Override
+    protected void onRestart() {
+        super.onRestart();
 
     }
 
@@ -100,6 +126,35 @@ public class EmergencyActivity extends AppCompatActivity {
 
         String currentTime = "Start: " + yyyy + "/" + MM + "/" + dd + " " + HH + ":" + mm;
         CurrentTimeView.setText(currentTime);
+    }
+
+    private void sendNotification()
+    {
+        //send notification
+        mDatabase.collection(EMERGENCY_REMINDER).document(uID).update("flag",String.valueOf(System.currentTimeMillis()))
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "onSuccess: success");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "onFailure: failure", e);
+                    }
+                });
+    }
+
+    private void CallPhone() {
+
+        Intent intent = new Intent();
+        intent.setAction(Intent.ACTION_CALL);
+        //url:统一资源定位符
+        //uri:统一资源标示符（更广）
+        intent.setData(Uri.parse("tel:" + "911"));
+        //开启系统拨号器
+        startActivity(intent);
     }
 
 }

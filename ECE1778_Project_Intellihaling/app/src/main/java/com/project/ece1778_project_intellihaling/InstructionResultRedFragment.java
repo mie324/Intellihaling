@@ -30,7 +30,7 @@ public class InstructionResultRedFragment extends Fragment {
     private static final int FRAG_YELLOW_INDEX = 2;
     private static final int FRAG_RED_INDEX = 3;
 
-    private static final int COUNT_NUMBER = 5;
+    private static final int COUNT_NUMBER = 3;
 
     private int count_num = COUNT_NUMBER, count_final = 0;
     private boolean flag = true;
@@ -116,8 +116,9 @@ public class InstructionResultRedFragment extends Fragment {
                     startBtn.setClickable(false);
 
                     new Thread( new Runnable() {
+
                         public void run() {
-                            while( flag) {
+                            while(flag) {
                                 if(count_num != count_final ){
                                     try {
                                         handle.sendMessage( handle.obtainMessage());
